@@ -1,7 +1,8 @@
 package com.wave39.popularmoviesstage1;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +13,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.i("MainActivity", "TMDB API key: " + getString(R.string.TMDB_API_KEY));
+        Log.i("MainActivity", "Another string: " + getString(R.string.hello_world));
     }
 
     @Override
