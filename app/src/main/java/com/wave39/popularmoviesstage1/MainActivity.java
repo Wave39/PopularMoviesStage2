@@ -15,7 +15,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         Log.i("MainActivity", "TMDB API key: " + getString(R.string.TMDB_API_KEY));
-        Log.i("MainActivity", "Another string: " + getString(R.string.hello_world));
     }
 
     @Override
