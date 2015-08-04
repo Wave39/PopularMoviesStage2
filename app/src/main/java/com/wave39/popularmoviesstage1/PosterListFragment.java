@@ -12,8 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-
-import com.wave39.popularmoviesstage1.dummy.DummyContent;
+import com.wave39.popularmoviesstage1.data.MovieListContent;
 
 /**
  * A fragment representing a list of Items.
@@ -75,8 +74,8 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         }
 
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+        mAdapter = new ArrayAdapter<MovieListContent.MovieListItem>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, MovieListContent.ITEMS);
     }
 
     @Override
@@ -116,7 +115,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(MovieListContent.ITEMS.get(position).id);
         }
     }
 
@@ -145,7 +144,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(int id);
     }
 
 }

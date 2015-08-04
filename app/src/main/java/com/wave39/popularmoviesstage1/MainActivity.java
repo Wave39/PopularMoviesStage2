@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 public class MainActivity extends ActionBarActivity implements PosterListFragment.OnFragmentInteractionListener {
 
     @Override
@@ -39,7 +38,7 @@ public class MainActivity extends ActionBarActivity implements PosterListFragmen
         return super.onOptionsItemSelected(item);
     }
 
-    public void onFragmentInteraction(String id){
+    public void onFragmentInteraction(int id){
         Log.i("MainActivity", "onFragmentInteraction with string " + id);
     }
 }
