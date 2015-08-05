@@ -73,7 +73,7 @@ public class MovieListContent
 
                     addItem(new MovieListItem(movieId, movieTitle));
                 }
-
+                
                 theActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         theAdapter.notifyDataSetChanged();

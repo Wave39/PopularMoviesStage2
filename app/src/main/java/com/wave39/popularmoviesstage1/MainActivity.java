@@ -9,6 +9,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements PosterListFragment.OnFragmentInteractionListener {
 
+    public final String LOG_TAG = MainActivity.class.getSimpleName();
+
     private static MainActivity instance;
 
     public MainActivity()
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.i("MainActivity", "TMDB API key: " + getString(R.string.TMDB_API_KEY));
+        Log.i(LOG_TAG, "TMDB API key: " + getString(R.string.TMDB_API_KEY));
     }
 
     @Override
@@ -38,7 +40,12 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sort_by_popularity) {
+            Log.i(LOG_TAG, "action_sort_by_popularity");
+            return true;
+        }
+        else if (id == R.id.action_sort_by_rating) {
+            Log.i(LOG_TAG, "action_sort_by_rating");
             return true;
         }
 
