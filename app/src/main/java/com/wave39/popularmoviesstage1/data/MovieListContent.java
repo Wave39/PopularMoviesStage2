@@ -1,7 +1,9 @@
 package com.wave39.popularmoviesstage1.data;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -36,13 +38,13 @@ public class MovieListContent
     public static Map<Integer, MovieListItem> ITEM_MAP = new HashMap<>();
 
     public ArrayAdapter<MovieListItem> theAdapter;
-    public MainActivity theActivity;
+    public Fragment theFragment;
 
-    private class DownloadMovieListTask extends AsyncTask<String, Void, String> {
+    private class DownloadMovieListTask extends AsyncTask<Void, Void, String> {
         @Override
-        protected String doInBackground(String... urls) {
+        protected String doInBackground(Void... voids) {
             try {
-                readMovieData();
+                readMovieData(theFragment.getActivity());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -54,7 +56,7 @@ public class MovieListContent
             Log.i(LOG_TAG, "onPostExecute result: " + result);
         }
 
-        private void getMovieListDataFromJson(String movieListJsonStr)
+        private void getMovieListDataFromJson(Activity theActivity, String movieListJsonStr)
                 throws JSONException {
             final String RESULTS = "results";
             final String TITLE = "title";
@@ -73,7 +75,7 @@ public class MovieListContent
 
                     addItem(new MovieListItem(movieId, movieTitle));
                 }
-                
+
                 theActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         theAdapter.notifyDataSetChanged();
@@ -85,7 +87,7 @@ public class MovieListContent
             }
         }
 
-        private void readMovieData() throws JSONException {
+        private void readMovieData(Activity theActivity) throws JSONException {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String movieListJsonStr;
@@ -125,7 +127,7 @@ public class MovieListContent
                 }
 
                 movieListJsonStr = buffer.toString();
-                getMovieListDataFromJson(movieListJsonStr);
+                getMovieListDataFromJson(theActivity, movieListJsonStr);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
             } finally {
@@ -145,7 +147,7 @@ public class MovieListContent
 
     private void readTheMovieData()
     {
-        new DownloadMovieListTask().execute("");
+        new DownloadMovieListTask().execute();
     }
 
     private static void clearArrays()
@@ -164,13 +166,10 @@ public class MovieListContent
         theAdapter = sourceAdapter;
     }
 
-    public void setActivity(MainActivity activity)
+    public MovieListContent(Fragment fragment)
     {
-        theActivity = activity;
-    }
+        theFragment = fragment;
 
-    public MovieListContent()
-    {
         clearArrays();
         readTheMovieData();
     }

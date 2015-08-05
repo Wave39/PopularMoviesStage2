@@ -76,13 +76,12 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        movieListContent = new MovieListContent();
+        movieListContent = new MovieListContent(this);
 
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<MovieListItem>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, MovieListContent.ITEMS);
         movieListContent.setAdapter((ArrayAdapter<MovieListItem>)mAdapter);
-        movieListContent.setActivity((MainActivity)getActivity());
     }
 
     @Override

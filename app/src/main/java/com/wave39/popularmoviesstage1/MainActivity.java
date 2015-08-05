@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.i(LOG_TAG, "TMDB API key: " + getString(R.string.TMDB_API_KEY));
     }
 
     @Override
