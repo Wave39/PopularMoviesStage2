@@ -77,16 +77,12 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         }
 
         movieListContent = new MovieListContent();
-        movieListContent.addItem(new MovieListItem(1, "Movie 1"));
-        movieListContent.addItem(new MovieListItem(2, "Movie 2"));
-        movieListContent.addItem(new MovieListItem(3, "Movie 3"));
-        movieListContent.addItem(new MovieListItem(4, "Movie 4"));
-        movieListContent.addItem(new MovieListItem(5, "Movie 5"));
-        movieListContent.addItem(new MovieListItem(6, "Movie 6"));
 
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<MovieListItem>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, MovieListContent.ITEMS);
+        movieListContent.setAdapter((ArrayAdapter<MovieListItem>)mAdapter);
+        movieListContent.setActivity((MainActivity)getActivity());
     }
 
     @Override

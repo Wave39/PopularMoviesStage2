@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.wave39.popularmoviesstage1.MainActivity;
+import com.wave39.popularmoviesstage1.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * MovieListContent
  * Created by bp on 8/4/15.
  */
 
@@ -28,12 +32,13 @@ public class MovieListContent
 {
     public final String LOG_TAG = MovieListContent.class.getSimpleName();
 
-    public static List<MovieListItem> ITEMS = new ArrayList<MovieListItem>();
-    public static Map<Integer, MovieListItem> ITEM_MAP = new HashMap<Integer, MovieListItem>();
+    public static List<MovieListItem> ITEMS = new ArrayList<>();
+    public static Map<Integer, MovieListItem> ITEM_MAP = new HashMap<>();
 
-    public static ArrayAdapter<MovieListItem> sourceAdapter;
+    public ArrayAdapter<MovieListItem> theAdapter;
+    public MainActivity theActivity;
 
-    private static class DownloadMovieListTask extends AsyncTask<String, Void, String> {
+    private class DownloadMovieListTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
             try {
@@ -46,7 +51,7 @@ public class MovieListContent
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("readMovieData", "onPostExecute result: " + result);
+            Log.i(LOG_TAG, "onPostExecute result: " + result);
         }
 
         private void getMovieListDataFromJson(String movieListJsonStr)
@@ -54,7 +59,7 @@ public class MovieListContent
             final String RESULTS = "results";
             final String TITLE = "title";
             final String MOVIE_ID = "id";
-            //clearArrays();
+            clearArrays();
             try {
                 JSONObject movieListJson = new JSONObject(movieListJsonStr);
                 JSONArray resultsArray = movieListJson.getJSONArray(RESULTS);
@@ -63,14 +68,19 @@ public class MovieListContent
                     JSONObject movie = resultsArray.getJSONObject(idx);
                     int movieId = movie.getInt(MOVIE_ID);
                     String movieTitle = movie.getString(TITLE);
-                    Log.i("readMovieData", "Found movie at index " + Integer.toString(idx) + " with id " + Integer.toString(movieId) + " and title " + movieTitle);
+                    Log.i(LOG_TAG, "Found movie at index " + Integer.toString(idx) +
+                            " with id " + Integer.toString(movieId) + " and title " + movieTitle);
 
-                    //addItem(new MovieListItem(movieId, movieTitle));
+                    addItem(new MovieListItem(movieId, movieTitle));
                 }
 
-                sourceAdapter.notifyDataSetChanged();
+                theActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        theAdapter.notifyDataSetChanged();
+                    }
+                });
             } catch (JSONException e) {
-                Log.e("readMovieData", e.getMessage(), e);
+                Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
         }
@@ -84,11 +94,13 @@ public class MovieListContent
                 final String MOVIE_LIST_BASE_URL =
                         "http://api.themoviedb.org/3/discover/movie?";
                 final String SORT_BY_PARAM = "sort_by";
+                final String SORT_BY_VALUE = "popularity.desc";
+                //final String SORT_BY_VALUE = "vote_average.desc";
                 final String API_KEY_PARAM = "api_key";
-
+                final String API_KEY_VALUE = MainActivity.getContext().getString(R.string.TMDB_API_KEY);
                 Uri builtUri = Uri.parse(MOVIE_LIST_BASE_URL).buildUpon()
-                        .appendQueryParameter(SORT_BY_PARAM, "popularity.desc")
-                        .appendQueryParameter(API_KEY_PARAM, "398dffb05ec2bd32618ff14f12db04df" /*Resources.getSystem().getString(R.string.TMDB_API_KEY)*/)
+                        .appendQueryParameter(SORT_BY_PARAM, SORT_BY_VALUE)
+                        .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE)
                         .build();
 
                 URL url = new URL(builtUri.toString());
@@ -115,7 +127,7 @@ public class MovieListContent
                 movieListJsonStr = buffer.toString();
                 getMovieListDataFromJson(movieListJsonStr);
             } catch (IOException e) {
-                Log.e("readMovieData", "Error ", e);
+                Log.e(LOG_TAG, "Error ", e);
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -124,35 +136,42 @@ public class MovieListContent
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e("readMovieData", "Error closing stream", e);
+                        Log.e(LOG_TAG, "Error closing stream", e);
                     }
                 }
             }
         }
     }
 
-    private static void readTheMovieData()
+    private void readTheMovieData()
     {
         new DownloadMovieListTask().execute("");
     }
 
-//    static {
-//        addItem(new MovieListItem(1, "Movie 1"));
-//        addItem(new MovieListItem(2, "Movie 2"));
-//        addItem(new MovieListItem(3, "Movie 3"));
-//        addItem(new MovieListItem(4, "Movie 4"));
-//        addItem(new MovieListItem(5, "Movie 5"));
-//        readTheMovieData();
-//    }
-
-    public void clearArrays()
+    private static void clearArrays()
     {
         ITEMS.clear();
         ITEM_MAP.clear();
     }
 
-    public void addItem(MovieListItem item) {
+    private static void addItem(MovieListItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
+    }
+
+    public void setAdapter(ArrayAdapter<MovieListItem> sourceAdapter)
+    {
+        theAdapter = sourceAdapter;
+    }
+
+    public void setActivity(MainActivity activity)
+    {
+        theActivity = activity;
+    }
+
+    public MovieListContent()
+    {
+        clearArrays();
+        readTheMovieData();
     }
 }
