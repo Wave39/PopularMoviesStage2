@@ -3,6 +3,7 @@ package com.wave39.popularmoviesstage1;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.TextView;
 
 import com.wave39.popularmoviesstage1.data.MovieListContent;
 import com.wave39.popularmoviesstage1.data.MovieListItem;
@@ -26,21 +26,19 @@ import com.wave39.popularmoviesstage1.data.MovieListItem;
  */
 public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public final String LOG_TAG = PosterListFragment.class.getSimpleName();
+//    private static final String STATIC_LOG_TAG = PosterListFragment.class.getSimpleName();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_SORT_BY = "sort_by";
+
+    private String mParamSortBy;
 
     private OnFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    public AbsListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
@@ -50,15 +48,14 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
     private MovieListContent movieListContent;
 
-    // TODO: Rename and change types of parameters
-    public static PosterListFragment newInstance(String param1, String param2) {
-        PosterListFragment fragment = new PosterListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static PosterListFragment newInstance(String sortBy) {
+//        Log.i(STATIC_LOG_TAG, "newInstance with parameter " + sortBy);
+//        PosterListFragment fragment = new PosterListFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_SORT_BY, sortBy);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -72,16 +69,23 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParamSortBy = getArguments().getString(ARG_SORT_BY);
         }
 
-        movieListContent = new MovieListContent(this);
+        if (mParamSortBy == null || mParamSortBy.length() == 0)
+        {
+            mParamSortBy = MainActivity.getContext().getString(R.string.api_value_sort_by_popularity);
+            //mParamSortBy = MainActivity.getContext().getString(R.string.api_value_sort_by_rating);
 
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<MovieListItem>(getActivity(),
+            Log.i(LOG_TAG, "Just set default sort by param to " + mParamSortBy);
+        }
+
+        movieListContent = new MovieListContent(this, mParamSortBy);
+
+        mAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, MovieListContent.ITEMS);
-        movieListContent.setAdapter((ArrayAdapter<MovieListItem>)mAdapter);
+        ArrayAdapter<MovieListItem> arrayAdapter = (ArrayAdapter<MovieListItem>) mAdapter;
+        movieListContent.setAdapter(arrayAdapter);
     }
 
     @Override
@@ -91,7 +95,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -130,13 +134,13 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      * the list is empty. If you would like to change the text, call this method
      * to supply the text it should use.
      */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
+//    public void setEmptyText(CharSequence emptyText) {
+//        View emptyView = mListView.getEmptyView();
+//
+//        if (emptyView instanceof TextView) {
+//            ((TextView) emptyView).setText(emptyText);
+//        }
+//    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -149,8 +153,12 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(int id);
     }
 
+    public void changeSortBy(String sortBy)
+    {
+        Log.i(LOG_TAG, "Changing sort by to " + sortBy);
+        movieListContent.readAndDisplayData(sortBy);
+    }
 }

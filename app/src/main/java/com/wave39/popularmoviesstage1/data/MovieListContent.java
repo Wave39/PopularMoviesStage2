@@ -3,11 +3,11 @@ package com.wave39.popularmoviesstage1.data;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.wave39.popularmoviesstage1.MainActivity;
+import com.wave39.popularmoviesstage1.PosterListFragment;
 import com.wave39.popularmoviesstage1.R;
 
 import org.json.JSONArray;
@@ -38,7 +38,9 @@ public class MovieListContent
     public static Map<Integer, MovieListItem> ITEM_MAP = new HashMap<>();
 
     public ArrayAdapter<MovieListItem> theAdapter;
-    public Fragment theFragment;
+    public PosterListFragment theFragment;
+
+    private String paramSortBy;
 
     private class DownloadMovieListTask extends AsyncTask<Void, Void, String> {
         @Override
@@ -56,7 +58,7 @@ public class MovieListContent
             Log.i(LOG_TAG, "onPostExecute result: " + result);
         }
 
-        private void getMovieListDataFromJson(Activity theActivity, String movieListJsonStr)
+        private void getMovieListDataFromJson(final Activity theActivity, String movieListJsonStr)
                 throws JSONException {
             final String RESULTS = "results";
             final String TITLE = "title";
@@ -70,8 +72,8 @@ public class MovieListContent
                     JSONObject movie = resultsArray.getJSONObject(idx);
                     int movieId = movie.getInt(MOVIE_ID);
                     String movieTitle = movie.getString(TITLE);
-                    Log.i(LOG_TAG, "Found movie at index " + Integer.toString(idx) +
-                            " with id " + Integer.toString(movieId) + " and title " + movieTitle);
+//                    Log.i(LOG_TAG, "Found movie at index " + Integer.toString(idx) +
+//                            " with id " + Integer.toString(movieId) + " and title " + movieTitle);
 
                     addItem(new MovieListItem(movieId, movieTitle));
                 }
@@ -79,6 +81,7 @@ public class MovieListContent
                 theActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         theAdapter.notifyDataSetChanged();
+                        theFragment.mListView.smoothScrollToPosition(0);
                     }
                 });
             } catch (JSONException e) {
@@ -96,12 +99,10 @@ public class MovieListContent
                 final String MOVIE_LIST_BASE_URL =
                         "http://api.themoviedb.org/3/discover/movie?";
                 final String SORT_BY_PARAM = "sort_by";
-                final String SORT_BY_VALUE = "popularity.desc";
-                //final String SORT_BY_VALUE = "vote_average.desc";
                 final String API_KEY_PARAM = "api_key";
                 final String API_KEY_VALUE = MainActivity.getContext().getString(R.string.TMDB_API_KEY);
                 Uri builtUri = Uri.parse(MOVIE_LIST_BASE_URL).buildUpon()
-                        .appendQueryParameter(SORT_BY_PARAM, SORT_BY_VALUE)
+                        .appendQueryParameter(SORT_BY_PARAM, paramSortBy)
                         .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE)
                         .build();
 
@@ -166,11 +167,15 @@ public class MovieListContent
         theAdapter = sourceAdapter;
     }
 
-    public MovieListContent(Fragment fragment)
+    public void readAndDisplayData(String sortBy)
+    {
+        paramSortBy = sortBy;
+        readTheMovieData();
+    }
+
+    public MovieListContent(PosterListFragment fragment, String sortBy)
     {
         theFragment = fragment;
-
-        clearArrays();
-        readTheMovieData();
+        readAndDisplayData(sortBy);
     }
 }
