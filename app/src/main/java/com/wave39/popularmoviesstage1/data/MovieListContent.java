@@ -63,6 +63,8 @@ public class MovieListContent
             final String RESULTS = "results";
             final String TITLE = "title";
             final String MOVIE_ID = "id";
+            final String POSTER_PATH = "poster_path";
+
             clearArrays();
             try {
                 JSONObject movieListJson = new JSONObject(movieListJsonStr);
@@ -72,10 +74,16 @@ public class MovieListContent
                     JSONObject movie = resultsArray.getJSONObject(idx);
                     int movieId = movie.getInt(MOVIE_ID);
                     String movieTitle = movie.getString(TITLE);
+                    String posterPath = movie.getString(POSTER_PATH);
 //                    Log.i(LOG_TAG, "Found movie at index " + Integer.toString(idx) +
 //                            " with id " + Integer.toString(movieId) + " and title " + movieTitle);
 
-                    addItem(new MovieListItem(movieId, movieTitle));
+                    MovieListItem newItem = new MovieListItem();
+                    newItem.id = movieId;
+                    newItem.title = movieTitle;
+                    newItem.posterPath = posterPath;
+
+                    addNewMovieListItem(newItem);
                 }
 
                 theActivity.runOnUiThread(new Runnable() {
@@ -157,7 +165,7 @@ public class MovieListContent
         ITEM_MAP.clear();
     }
 
-    private static void addItem(MovieListItem item) {
+    private static void addNewMovieListItem(MovieListItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }

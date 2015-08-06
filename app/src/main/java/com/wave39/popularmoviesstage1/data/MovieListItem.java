@@ -7,10 +7,10 @@ package com.wave39.popularmoviesstage1.data;
 public class MovieListItem {
     public int id;
     public String title;
+    public String posterPath;
 
-    public MovieListItem(int id, String title) {
-        this.id = id;
-        this.title = title;
+    public MovieListItem() {
+
     }
 
     @Override

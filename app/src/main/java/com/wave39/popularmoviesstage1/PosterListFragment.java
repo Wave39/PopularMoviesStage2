@@ -125,7 +125,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(MovieListContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(MovieListContent.ITEMS.get(position));
         }
     }
 
@@ -153,7 +153,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(int id);
+        public void onFragmentInteraction(MovieListItem movieListItem);
     }
 
     public void changeSortBy(String sortBy)
