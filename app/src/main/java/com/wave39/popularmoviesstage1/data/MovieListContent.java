@@ -20,7 +20,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +64,13 @@ public class MovieListContent
         private void getMovieListDataFromJson(final Activity theActivity, String movieListJsonStr)
                 throws JSONException {
             final String RESULTS = "results";
+            final String ORIGINAL_TITLE = "original_title";
             final String TITLE = "title";
             final String MOVIE_ID = "id";
             final String POSTER_PATH = "poster_path";
+            final String OVERVIEW = "overview";
+            final String VOTE_AVERAGE = "vote_average";
+            final String RELEASE_DATE = "release_date";
 
             clearArrays();
             try {
@@ -73,15 +80,31 @@ public class MovieListContent
                 {
                     JSONObject movie = resultsArray.getJSONObject(idx);
                     int movieId = movie.getInt(MOVIE_ID);
+                    String originalTitle = movie.getString(ORIGINAL_TITLE);
                     String movieTitle = movie.getString(TITLE);
                     String posterPath = movie.getString(POSTER_PATH);
+                    String overview = movie.getString(OVERVIEW);
+                    double voteAverage = movie.getDouble(VOTE_AVERAGE);
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date releaseDate = new Date();
+                    try {
+                        releaseDate = dateFormat.parse(movie.getString(RELEASE_DATE));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
 //                    Log.i(LOG_TAG, "Found movie at index " + Integer.toString(idx) +
 //                            " with id " + Integer.toString(movieId) + " and title " + movieTitle);
 
                     MovieListItem newItem = new MovieListItem();
                     newItem.id = movieId;
+                    newItem.originalTitle = originalTitle;
                     newItem.title = movieTitle;
                     newItem.posterPath = posterPath;
+                    newItem.overview = overview;
+                    newItem.voteAverage = voteAverage;
+                    newItem.releaseDate = releaseDate;
 
                     addNewMovieListItem(newItem);
                 }
