@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 
 import com.wave39.popularmoviesstage1.data.MovieListContent;
 import com.wave39.popularmoviesstage1.data.MovieListItem;
@@ -44,18 +42,9 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private PosterListAdapter mAdapter;
 
     private MovieListContent movieListContent;
-
-//    public static PosterListFragment newInstance(String sortBy) {
-//        Log.i(STATIC_LOG_TAG, "newInstance with parameter " + sortBy);
-//        PosterListFragment fragment = new PosterListFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_SORT_BY, sortBy);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -82,10 +71,9 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
         movieListContent = new MovieListContent(this, mParamSortBy);
 
-        mAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, MovieListContent.ITEMS);
-        ArrayAdapter<MovieListItem> arrayAdapter = (ArrayAdapter<MovieListItem>) mAdapter;
-        movieListContent.setAdapter(arrayAdapter);
+        mAdapter = new PosterListAdapter(getActivity().getBaseContext());
+        mAdapter.addAll(MovieListContent.ITEMS);
+        movieListContent.setAdapter(mAdapter);
     }
 
     @Override
@@ -96,6 +84,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         mListView.setAdapter(mAdapter);
+        Log.i(LOG_TAG, "Set adapter in onCreateView");
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -153,12 +142,20 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(MovieListItem movieListItem);
+        void onFragmentInteraction(MovieListItem movieListItem);
     }
 
     public void changeSortBy(String sortBy)
     {
         Log.i(LOG_TAG, "Changing sort by to " + sortBy);
         movieListContent.readAndDisplayData(sortBy);
+    }
+
+    public void redrawWithNewData()
+    {
+        mAdapter.clear();
+        mAdapter.addAll(MovieListContent.ITEMS);
+        mAdapter.notifyDataSetChanged();
+        mListView.smoothScrollToPosition(0);
     }
 }

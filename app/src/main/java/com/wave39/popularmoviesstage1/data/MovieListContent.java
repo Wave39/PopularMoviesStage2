@@ -5,9 +5,9 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import com.wave39.popularmoviesstage1.MainActivity;
+import com.wave39.popularmoviesstage1.PosterListAdapter;
 import com.wave39.popularmoviesstage1.PosterListFragment;
 import com.wave39.popularmoviesstage1.R;
 
@@ -41,7 +41,7 @@ public class MovieListContent
     public static List<MovieListItem> ITEMS = new ArrayList<>();
     public static Map<Integer, MovieListItem> ITEM_MAP = new HashMap<>();
 
-    public ArrayAdapter<MovieListItem> theAdapter;
+    public PosterListAdapter theAdapter;
     public PosterListFragment theFragment;
 
     private String paramSortBy;
@@ -90,7 +90,7 @@ public class MovieListContent
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date releaseDate = null;
                     String releaseDateString = movie.getString(RELEASE_DATE);
-                    Log.i(LOG_TAG, "Movie " + originalTitle + " has a release date of " + releaseDateString);
+                    //Log.i(LOG_TAG, "Movie " + originalTitle + " has a release date of " + releaseDateString);
                     if ((releaseDateString != null) && (releaseDateString.length() == 10)) {
                         try {
                             releaseDate = dateFormat.parse(releaseDateString);
@@ -116,8 +116,7 @@ public class MovieListContent
 
                 theActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        theAdapter.notifyDataSetChanged();
-                        theFragment.mListView.smoothScrollToPosition(0);
+                        theFragment.redrawWithNewData();
                     }
                 });
             } catch (JSONException e) {
@@ -165,6 +164,8 @@ public class MovieListContent
 
                 movieListJsonStr = buffer.toString();
                 getMovieListDataFromJson(theActivity, movieListJsonStr);
+
+                Log.i(LOG_TAG, "Done with readMovieData");
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
             } finally {
@@ -198,7 +199,7 @@ public class MovieListContent
         ITEM_MAP.put(item.id, item);
     }
 
-    public void setAdapter(ArrayAdapter<MovieListItem> sourceAdapter)
+    public void setAdapter(PosterListAdapter sourceAdapter)
     {
         theAdapter = sourceAdapter;
     }
