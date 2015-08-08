@@ -1,5 +1,6 @@
 package com.wave39.popularmoviesstage1.data;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -86,12 +87,16 @@ public class MovieListContent
                     String overview = movie.getString(OVERVIEW);
                     double voteAverage = movie.getDouble(VOTE_AVERAGE);
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date releaseDate = new Date();
-                    try {
-                        releaseDate = dateFormat.parse(movie.getString(RELEASE_DATE));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date releaseDate = null;
+                    String releaseDateString = movie.getString(RELEASE_DATE);
+                    Log.i(LOG_TAG, "Movie " + originalTitle + " has a release date of " + releaseDateString);
+                    if ((releaseDateString != null) && (releaseDateString.length() == 10)) {
+                        try {
+                            releaseDate = dateFormat.parse(releaseDateString);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
 
 //                    Log.i(LOG_TAG, "Found movie at index " + Integer.toString(idx) +
