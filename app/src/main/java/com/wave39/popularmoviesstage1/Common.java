@@ -13,6 +13,7 @@ public class Common
     {
         final String baseURL = "http://image.tmdb.org/t/p/";
         final String sizeIdentifier = "w185";
+        //final String sizeIdentifier = "w342";
         return baseURL + sizeIdentifier + "/" + movieListItem.posterPath;
     }
 }
