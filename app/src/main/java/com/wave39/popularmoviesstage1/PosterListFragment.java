@@ -44,7 +44,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      */
     private PosterListAdapter mAdapter;
 
-    private MovieListContent movieListContent;
+    private MovieListContent mMovieListContent;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,11 +69,11 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
             Log.i(LOG_TAG, "Just set default sort by param to " + mParamSortBy);
         }
 
-        movieListContent = new MovieListContent(this, mParamSortBy);
+        mMovieListContent = new MovieListContent(this, mParamSortBy);
 
         mAdapter = new PosterListAdapter(getActivity().getBaseContext());
         mAdapter.addAll(MovieListContent.ITEMS);
-        movieListContent.setAdapter(mAdapter);
+        mMovieListContent.setAdapter(mAdapter);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     public void changeSortBy(String sortBy)
     {
         Log.i(LOG_TAG, "Changing sort by to " + sortBy);
-        movieListContent.readAndDisplayData(sortBy);
+        mMovieListContent.readAndDisplayData(sortBy);
     }
 
     public void redrawWithNewData()
