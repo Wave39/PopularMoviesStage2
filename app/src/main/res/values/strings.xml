@@ -7,4 +7,5 @@
     <string name="sort_by_rating">Sort by rating</string>
     <string name="api_value_sort_by_popularity">popularity.desc</string>
     <string name="api_value_sort_by_rating">vote_average.desc</string>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
 </resources>
