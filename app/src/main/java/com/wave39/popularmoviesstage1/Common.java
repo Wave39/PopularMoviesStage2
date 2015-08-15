@@ -9,11 +9,21 @@ import com.wave39.popularmoviesstage1.data.MovieListItem;
 
 public class Common
 {
-    public static String getPosterURL(MovieListItem movieListItem)
+
+    private static String getPosterURLWithSizeIdentifier(MovieListItem movieListItem, String sizeIdentifier)
     {
         final String baseURL = "http://image.tmdb.org/t/p/";
-        final String sizeIdentifier = "w185";
-        //final String sizeIdentifier = "w342";
         return baseURL + sizeIdentifier + "/" + movieListItem.posterPath;
     }
+
+    public static String getPosterURL(MovieListItem movieListItem)
+    {
+        return getPosterURLWithSizeIdentifier(movieListItem, "w185");
+    }
+
+    public static String getLargePosterURL(MovieListItem movieListItem)
+    {
+        return getPosterURLWithSizeIdentifier(movieListItem, "w342");
+    }
+
 }

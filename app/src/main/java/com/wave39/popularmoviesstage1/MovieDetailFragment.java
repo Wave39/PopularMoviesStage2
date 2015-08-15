@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wave39.popularmoviesstage1.data.MovieListItem;
 
 import java.text.SimpleDateFormat;
@@ -65,10 +67,14 @@ public class MovieDetailFragment extends Fragment {
 
         TextView textView = (TextView)getView().findViewById(R.id.original_title_textview);
         textView.setText(movieListItem.originalTitle);
-        textView = (TextView)getView().findViewById(R.id.poster_thumbnail_textview);
-        textView.setText(movieListItem.posterPath);
+
+        String photoUrl = Common.getLargePosterURL(movieListItem);
+        ImageView imageView = (ImageView)getView().findViewById(R.id.poster_thumbnail_imageview);
+        Picasso.with(MainActivity.getContext()).load(photoUrl).into(imageView);
+
         textView = (TextView)getView().findViewById(R.id.plot_synopsis_textview);
-        textView.setText(movieListItem.overview);
+        textView.setText(movieListItem.plotSynopsis());
+
         textView = (TextView)getView().findViewById(R.id.user_rating_textview);
         textView.setText(Double.toString(movieListItem.voteAverage));
 

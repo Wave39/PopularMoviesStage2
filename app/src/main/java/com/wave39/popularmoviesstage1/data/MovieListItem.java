@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.util.Date;
 
 /**
+ * MovieListItem
  * Created by bp on 8/4/15.
  */
 
@@ -25,6 +26,21 @@ public class MovieListItem implements Parcelable {
     @Override
     public String toString() {
         return title;
+    }
+
+    public String plotSynopsis()
+    {
+        String plotSynopsis = "No plot synopsis";
+
+        if (overview != null)
+        {
+            if (overview.length() > 0 && !overview.equalsIgnoreCase("null"))
+            {
+                plotSynopsis = overview;
+            }
+        }
+
+        return plotSynopsis;
     }
 
     // Parcelable stuff
