@@ -1,11 +1,19 @@
 <resources>
+
     <string name="app_name">Popular Movies</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="sort_by_popularity">Sort by popularity</string>
     <string name="sort_by_rating">Sort by rating</string>
     <string name="api_value_sort_by_popularity">popularity.desc</string>
     <string name="api_value_sort_by_rating">vote_average.desc</string>
-    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+
+    <!-- Movie detail strings -->
+    <string name="title_activity_movie_detail">Movie Details</string>
+    <string name="original_title">Original title:</string>
+    <string name="poster_thumbnail">Poster thumbnail:</string>
+    <string name="plot_synopsis">Plot synopsis:</string>
+    <string name="user_rating">User rating:</string>
+    <string name="release_date">Release date:</string>
+
 </resources>

@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MovieDetailActivity extends AppCompatActivity {
+import com.wave39.popularmoviesstage1.data.MovieListItem;
+
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailFragment.OnFragmentInteractionListener{
 
     public final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
 
@@ -14,8 +16,11 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-        Integer movieId = getIntent().getExtras().getInt("movieid");
-        Log.i(LOG_TAG, "Movie ID: " + Integer.toString(movieId));
+        MovieListItem movieListItem = getIntent().getExtras().getParcelable("movielistitem");
+        Log.i(LOG_TAG, "Movie: " + movieListItem);
+
+        MovieDetailFragment movieDetailFragment = (MovieDetailFragment)getFragmentManager().findFragmentById(R.id.fragment_movie_detail);
+        movieDetailFragment.redrawFragment(movieListItem);
     }
 
     @Override
@@ -38,5 +43,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onFragmentInteraction() {
+        Log.i(LOG_TAG, "onFragmentInteraction");
     }
 }

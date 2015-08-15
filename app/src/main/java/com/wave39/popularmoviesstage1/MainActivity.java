@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     }
 
     public void onFragmentInteraction(MovieListItem movieListItem) {
-        Log.i("MainActivity", "onFragmentInteraction with movie list item " + movieListItem);
+        Log.i(LOG_TAG, "onFragmentInteraction with movie list item " + movieListItem);
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra("movieid", movieListItem.id);
+        intent.putExtra("movielistitem", movieListItem);
         startActivity(intent);
     }
 }
