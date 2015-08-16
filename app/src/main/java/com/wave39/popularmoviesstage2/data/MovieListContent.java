@@ -1,4 +1,4 @@
-package com.wave39.popularmoviesstage1.data;
+package com.wave39.popularmoviesstage2.data;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,10 +6,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.wave39.popularmoviesstage1.MainActivity;
-import com.wave39.popularmoviesstage1.PosterListAdapter;
-import com.wave39.popularmoviesstage1.PosterListFragment;
-import com.wave39.popularmoviesstage1.R;
+import com.wave39.popularmoviesstage2.MainActivity;
+import com.wave39.popularmoviesstage2.PosterListAdapter;
+import com.wave39.popularmoviesstage2.PosterListFragment;
+import com.wave39.popularmoviesstage2.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

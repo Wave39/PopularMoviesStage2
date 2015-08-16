@@ -1,4 +1,4 @@
-package com.wave39.popularmoviesstage1;
+package com.wave39.popularmoviesstage2;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.wave39.popularmoviesstage1.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieListItem;
 
 /**
  * PosterListAdapter

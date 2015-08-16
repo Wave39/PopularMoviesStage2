@@ -1,4 +1,4 @@
-package com.wave39.popularmoviesstage1.data;
+package com.wave39.popularmoviesstage2.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

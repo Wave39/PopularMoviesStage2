@@ -1,4 +1,4 @@
-package com.wave39.popularmoviesstage1;
+package com.wave39.popularmoviesstage2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.wave39.popularmoviesstage1.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieListItem;
 
 public class MainActivity extends AppCompatActivity implements PosterListFragment.OnFragmentInteractionListener {
 

@@ -1,6 +1,6 @@
-package com.wave39.popularmoviesstage1;
+package com.wave39.popularmoviesstage2;
 
-import com.wave39.popularmoviesstage1.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieListItem;
 
 /**
  * Common

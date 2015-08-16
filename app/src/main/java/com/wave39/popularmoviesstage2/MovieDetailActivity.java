@@ -1,10 +1,10 @@
-package com.wave39.popularmoviesstage1;
+package com.wave39.popularmoviesstage2;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.wave39.popularmoviesstage1.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieListItem;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailFragment.OnFragmentInteractionListener{
 

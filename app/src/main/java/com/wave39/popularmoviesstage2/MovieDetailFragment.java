@@ -1,4 +1,4 @@
-package com.wave39.popularmoviesstage1;
+package com.wave39.popularmoviesstage2;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.wave39.popularmoviesstage1.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieListItem;
 
 import java.text.SimpleDateFormat;
 

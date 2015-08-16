@@ -1,4 +1,4 @@
-package com.wave39.popularmoviesstage1;
+package com.wave39.popularmoviesstage2;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
-import com.wave39.popularmoviesstage1.data.MovieListContent;
-import com.wave39.popularmoviesstage1.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieListContent;
+import com.wave39.popularmoviesstage2.data.MovieListItem;
 
 /**
  * A fragment representing a list of Items.

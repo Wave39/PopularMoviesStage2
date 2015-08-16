@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context="com.wave39.popularmoviesstage1.MovieDetailFragment"
+    tools:context="com.wave39.popularmoviesstage2.MovieDetailFragment"
     android:padding="15dp">
 
     <LinearLayout
