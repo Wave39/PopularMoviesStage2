@@ -25,7 +25,6 @@ import com.wave39.popularmoviesstage2.data.MovieListItem;
 public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     public final String LOG_TAG = PosterListFragment.class.getSimpleName();
-//    private static final String STATIC_LOG_TAG = PosterListFragment.class.getSimpleName();
 
     private static final String ARG_SORT_BY = "sort_by";
 
@@ -33,17 +32,8 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * The fragment's ListView/GridView.
-     */
     public AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
     private PosterListAdapter mAdapter;
-
     private MovieListContent mMovieListContent;
 
     /**
@@ -64,8 +54,6 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         if (mParamSortBy == null || mParamSortBy.length() == 0)
         {
             mParamSortBy = MainActivity.getContext().getString(R.string.api_value_sort_by_popularity);
-            //mParamSortBy = MainActivity.getContext().getString(R.string.api_value_sort_by_rating);
-
             Log.i(LOG_TAG, "Just set default sort by param to " + mParamSortBy);
         }
 
@@ -117,19 +105,6 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
             mListener.onFragmentInteraction(MovieListContent.ITEMS.get(position));
         }
     }
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-//    public void setEmptyText(CharSequence emptyText) {
-//        View emptyView = mListView.getEmptyView();
-//
-//        if (emptyView instanceof TextView) {
-//            ((TextView) emptyView).setText(emptyText);
-//        }
-//    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -15,9 +15,18 @@ import com.wave39.popularmoviesstage2.data.MovieListItem;
 
 import java.text.SimpleDateFormat;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MovieDetailFragment extends Fragment {
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
+
+    @Bind(R.id.original_title_textview) TextView originalTitleTextView;
+    @Bind(R.id.poster_thumbnail_imageview) ImageView thumbnailImageView;
+    @Bind(R.id.plot_synopsis_textview) TextView plotSynopsisTextView;
+    @Bind(R.id.user_rating_textview) TextView userRatingTextView;
+    @Bind(R.id.release_date_textview) TextView releaseDateTextView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,7 +46,10 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreateView");
 
-        return inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        ButterKnife.bind(this, view);
+
+        return view;
     }
 
     @Override
@@ -65,18 +77,16 @@ public class MovieDetailFragment extends Fragment {
     {
         Log.i(LOG_TAG, "redrawFragment with movie " + movieListItem);
 
-        TextView textView = (TextView)getView().findViewById(R.id.original_title_textview);
-        textView.setText(movieListItem.originalTitle);
+        originalTitleTextView.setText(movieListItem.originalTitle);
 
         String photoUrl = Common.getLargePosterURL(movieListItem);
-        ImageView imageView = (ImageView)getView().findViewById(R.id.poster_thumbnail_imageview);
-        Picasso.with(MainActivity.getContext()).load(photoUrl).into(imageView);
+        Picasso.with(MainActivity.getContext()).
+                load(photoUrl).
+                into(thumbnailImageView);
 
-        textView = (TextView)getView().findViewById(R.id.plot_synopsis_textview);
-        textView.setText(movieListItem.plotSynopsis());
+        plotSynopsisTextView.setText(movieListItem.plotSynopsis());
 
-        textView = (TextView)getView().findViewById(R.id.user_rating_textview);
-        textView.setText(Double.toString(movieListItem.voteAverage));
+        userRatingTextView.setText(Double.toString(movieListItem.voteAverage));
 
         String releaseDateString = "Unknown";
         if (movieListItem.releaseDate != null) {
@@ -84,7 +94,6 @@ public class MovieDetailFragment extends Fragment {
             releaseDateString = dateFormat.format(movieListItem.releaseDate);
         }
 
-        textView = (TextView)getView().findViewById(R.id.release_date_textview);
-        textView.setText(releaseDateString);
+        releaseDateTextView.setText(releaseDateString);
     }
 }
