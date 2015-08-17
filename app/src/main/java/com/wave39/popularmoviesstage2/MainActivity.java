@@ -3,14 +3,14 @@ package com.wave39.popularmoviesstage2;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.wave39.popularmoviesstage2.data.MovieListItem;
 
-public class MainActivity extends FragmentActivity implements PosterListFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements PosterListFragment.OnFragmentInteractionListener {
 
     public final String LOG_TAG = MainActivity.class.getSimpleName();
 
