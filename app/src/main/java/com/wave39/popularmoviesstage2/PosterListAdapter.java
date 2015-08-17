@@ -64,10 +64,13 @@ public class PosterListAdapter extends ArrayAdapter<MovieListItem> {
         public void setValues(MovieListItem data)
         {
             String photoUrl = Common.getPosterURL(data);
+//            Picasso.with(MainActivity.getContext())
+//                    .load(photoUrl)
+//                    .placeholder(R.drawable.frames)
+//                    .error(R.drawable.status_error)
+//                    .into(Photo);
             Picasso.with(MainActivity.getContext())
                     .load(photoUrl)
-                    .placeholder(R.drawable.frames)
-                    .error(R.drawable.status_error)
                     .into(Photo);
         }
     }
