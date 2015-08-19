@@ -6,4 +6,4 @@
 /build
 /captures
 app/src/main/res/values/api_keys.xml
-/gradle.properties
+gradle.properties
