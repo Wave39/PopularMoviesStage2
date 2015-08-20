@@ -3,7 +3,6 @@ package com.wave39.popularmoviesstage2;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import com.wave39.popularmoviesstage2.data.MovieListItem;
  */
 public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    public final String LOG_TAG = PosterListFragment.class.getSimpleName();
+    //public final String LOG_TAG = PosterListFragment.class.getSimpleName();
 
     private static final String ARG_SORT_BY = "sort_by";
 
