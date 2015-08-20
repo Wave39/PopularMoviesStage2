@@ -53,8 +53,13 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
         if (mParamSortBy == null || mParamSortBy.length() == 0)
         {
+            // set the default sort by parameter if it is empty
             mParamSortBy = MainActivity.getContext().getString(R.string.api_value_sort_by_popularity);
-            Log.i(LOG_TAG, "Just set default sort by param to " + mParamSortBy);
+        }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_SORT_BY)) {
+            // restore the sort by from the bundle state, such as after a rotation
+            mParamSortBy = savedInstanceState.getString(ARG_SORT_BY);
         }
 
         mMovieListContent = new MovieListContent(this, mParamSortBy);
@@ -69,12 +74,8 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_posterlist, container, false);
 
-        // Set the adapter
         mListView = (AbsListView) view.findViewById(R.id.grid_view);
         mListView.setAdapter(mAdapter);
-        Log.i(LOG_TAG, "Set adapter in onCreateView");
-
-        // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
         return view;
@@ -122,7 +123,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
     public void changeSortBy(String sortBy)
     {
-        Log.i(LOG_TAG, "Changing sort by to " + sortBy);
+        mParamSortBy = sortBy;
         mMovieListContent.readAndDisplayData(sortBy);
     }
 
@@ -133,4 +134,11 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         mAdapter.notifyDataSetChanged();
         mListView.smoothScrollToPosition(0);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(ARG_SORT_BY, mParamSortBy);
+        super.onSaveInstanceState(outState);
+    }
+
 }
