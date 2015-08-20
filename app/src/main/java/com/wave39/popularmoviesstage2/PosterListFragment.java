@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
-import com.wave39.popularmoviesstage2.data.MovieListContent;
 import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.networking.DownloadMovieListTask;
+import com.wave39.popularmoviesstage2.networking.OnTaskCompleted;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -21,7 +24,7 @@ import com.wave39.popularmoviesstage2.data.MovieListItem;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener, OnTaskCompleted {
 
     //public final String LOG_TAG = PosterListFragment.class.getSimpleName();
 
@@ -33,7 +36,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
     public AbsListView mListView;
     private PosterListAdapter mAdapter;
-    private MovieListContent mMovieListContent;
+    private List<MovieListItem> mMovieList;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,11 +64,9 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
             mParamSortBy = savedInstanceState.getString(ARG_SORT_BY);
         }
 
-        mMovieListContent = new MovieListContent(this, mParamSortBy);
+        new DownloadMovieListTask(getActivity().getBaseContext(), mParamSortBy, this).execute();
 
         mAdapter = new PosterListAdapter(getActivity().getBaseContext());
-        mAdapter.addAll(MovieListContent.ITEMS);
-        mMovieListContent.setAdapter(mAdapter);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(MovieListContent.ITEMS.get(position));
+            mListener.onFragmentInteraction(mMovieList.get(position));
         }
     }
 
@@ -123,13 +124,13 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     public void changeSortBy(String sortBy)
     {
         mParamSortBy = sortBy;
-        mMovieListContent.readAndDisplayData(sortBy);
+        new DownloadMovieListTask(getActivity().getBaseContext(), mParamSortBy, this).execute();
     }
 
     public void redrawWithNewData()
     {
         mAdapter.clear();
-        mAdapter.addAll(MovieListContent.ITEMS);
+        mAdapter.addAll(mMovieList);
         mAdapter.notifyDataSetChanged();
         mListView.smoothScrollToPosition(0);
     }
@@ -140,4 +141,9 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onTaskCompleted(List<MovieListItem> result) {
+        mMovieList = result;
+        redrawWithNewData();
+    }
 }
