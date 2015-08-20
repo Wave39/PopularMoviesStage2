@@ -13,8 +13,11 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.data.MovieReview;
+import com.wave39.popularmoviesstage2.data.MovieVideo;
 import com.wave39.popularmoviesstage2.networking.DownloadMovieReviewListTask;
+import com.wave39.popularmoviesstage2.networking.DownloadMovieVideoListTask;
 import com.wave39.popularmoviesstage2.networking.OnMovieReviewListTaskCompleted;
+import com.wave39.popularmoviesstage2.networking.OnMovieVideoListTaskCompleted;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MovieDetailFragment extends Fragment implements OnMovieReviewListTaskCompleted {
+public class MovieDetailFragment extends Fragment implements OnMovieReviewListTaskCompleted, OnMovieVideoListTaskCompleted {
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
@@ -101,10 +104,16 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         releaseDateTextView.setText(releaseDateString);
 
         new DownloadMovieReviewListTask(movie.id, this).execute();
+        new DownloadMovieVideoListTask(movie.id, this).execute();
     }
 
     @Override
     public void onMovieReviewListTaskCompleted(List<MovieReview> result) {
         Log.i(LOG_TAG, "onMovieReviewListTaskCompleted");
+    }
+
+    @Override
+    public void onMovieVideoListTaskCompleted(List<MovieVideo> result) {
+        Log.i(LOG_TAG, "onMovieVideoListTaskCompleted");
     }
 }

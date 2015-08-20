@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.wave39.popularmoviesstage2.MainActivity;
 import com.wave39.popularmoviesstage2.R;
-import com.wave39.popularmoviesstage2.data.MovieReview;
-import com.wave39.popularmoviesstage2.data.MovieReviewContract;
+import com.wave39.popularmoviesstage2.data.MovieVideo;
+import com.wave39.popularmoviesstage2.data.MovieVideoContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,59 +23,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DownloadMovieReviewListTask
+ * DownloadMovieVideoListTask
  * Created by bp on 8/20/15.
  */
 
-public class DownloadMovieReviewListTask  extends AsyncTask<Void, Void, List<MovieReview>> {
-    public final String LOG_TAG = DownloadMovieReviewListTask.class.getSimpleName();
+public class DownloadMovieVideoListTask extends AsyncTask<Void, Void, List<MovieVideo>> {
+    public final String LOG_TAG = DownloadMovieVideoListTask.class.getSimpleName();
 
-    private static List<MovieReview> mReviews = new ArrayList<>();
+    private static List<MovieVideo> mVideos = new ArrayList<>();
     private int mMovieId;
-    private OnMovieReviewListTaskCompleted theListener;
+    private OnMovieVideoListTaskCompleted theListener;
 
-    public DownloadMovieReviewListTask(int movieId, OnMovieReviewListTaskCompleted listener)
+    public DownloadMovieVideoListTask(int movieId, OnMovieVideoListTaskCompleted listener)
     {
         mMovieId = movieId;
         theListener = listener;
     }
 
     @Override
-    protected List<MovieReview> doInBackground(Void... voids) {
+    protected List<MovieVideo> doInBackground(Void... voids) {
         try {
-            readMovieReviewData();
+            readMovieVideoData();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return mReviews;
+        return mVideos;
     }
 
-    protected void onPostExecute(List<MovieReview> result) {
-        theListener.onMovieReviewListTaskCompleted(result);
+    protected void onPostExecute(List<MovieVideo> result) {
+        theListener.onMovieVideoListTaskCompleted(result);
     }
 
-    private void getMovieReviewListDataFromJson(String movieListJsonStr)
+    private void getMovieVideoListDataFromJson(String movieVideoListJsonStr)
             throws JSONException {
-        mReviews.clear();
+        mVideos.clear();
         try {
-            JSONObject movieListJson = new JSONObject(movieListJsonStr);
-            JSONArray resultsArray = movieListJson.getJSONArray(MovieReviewContract.JSON_RESULTS);
+            JSONObject movieListJson = new JSONObject(movieVideoListJsonStr);
+            JSONArray resultsArray = movieListJson.getJSONArray(MovieVideoContract.JSON_RESULTS);
             for (int idx = 0; idx < resultsArray.length(); idx++)
             {
                 JSONObject movie = resultsArray.getJSONObject(idx);
-                String movieReviewId = movie.getString(MovieReviewContract.JSON_MOVIE_REVIEW_ID);
-                String author = movie.getString(MovieReviewContract.JSON_AUTHOR);
-                String content = movie.getString(MovieReviewContract.JSON_CONTENT);
-                String url = movie.getString(MovieReviewContract.JSON_URL);
+                String movieVideoId = movie.getString(MovieVideoContract.JSON_MOVIE_VIDEO_ID);
+                String key = movie.getString(MovieVideoContract.JSON_KEY);
+                String name = movie.getString(MovieVideoContract.JSON_NAME);
+                String site = movie.getString(MovieVideoContract.JSON_SITE);
+                int size = movie.getInt(MovieVideoContract.JSON_SIZE);
+                String type = movie.getString(MovieVideoContract.JSON_TYPE);
 
-                MovieReview newItem = new MovieReview();
-                newItem.id = movieReviewId;
+                MovieVideo newItem = new MovieVideo();
+                newItem.id = movieVideoId;
                 newItem.movieId = mMovieId;
-                newItem.author = author;
-                newItem.content = content;
-                newItem.url = url;
+                newItem.key = key;
+                newItem.name = name;
+                newItem.site = site;
+                newItem.size = size;
+                newItem.type = type;
 
-                mReviews.add(newItem);
+                mVideos.add(newItem);
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -83,17 +87,17 @@ public class DownloadMovieReviewListTask  extends AsyncTask<Void, Void, List<Mov
         }
     }
 
-    private void readMovieReviewData() throws JSONException {
+    private void readMovieVideoData() throws JSONException {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String movieReviewListJsonStr;
+        String movieVideoListJsonStr;
 
         try {
-            final String MOVIE_REVIEW_LIST_BASE_URL =
-                    "http://api.themoviedb.org/3/movie/" + Integer.toString(mMovieId) + "/reviews?";
+            final String MOVIE_VIDEO_LIST_BASE_URL =
+                    "http://api.themoviedb.org/3/movie/" + Integer.toString(mMovieId) + "/videos?";
             final String API_KEY_PARAM = "api_key";
             final String API_KEY_VALUE = MainActivity.getContext().getString(R.string.tmdb_api_key);
-            Uri builtUri = Uri.parse(MOVIE_REVIEW_LIST_BASE_URL).buildUpon()
+            Uri builtUri = Uri.parse(MOVIE_VIDEO_LIST_BASE_URL).buildUpon()
                     .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE)
                     .build();
 
@@ -118,9 +122,9 @@ public class DownloadMovieReviewListTask  extends AsyncTask<Void, Void, List<Mov
                 return;
             }
 
-            movieReviewListJsonStr = buffer.toString();
-            Log.i(LOG_TAG, "Review list JSON: " + movieReviewListJsonStr);
-            getMovieReviewListDataFromJson(movieReviewListJsonStr);
+            movieVideoListJsonStr = buffer.toString();
+            Log.i(LOG_TAG, "Video list JSON: " + movieVideoListJsonStr);
+            getMovieVideoListDataFromJson(movieVideoListJsonStr);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
         } finally {
