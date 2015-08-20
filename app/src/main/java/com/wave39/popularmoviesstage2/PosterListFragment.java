@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 
 import com.wave39.popularmoviesstage2.data.MovieListItem;
 import com.wave39.popularmoviesstage2.networking.DownloadMovieListTask;
-import com.wave39.popularmoviesstage2.networking.OnTaskCompleted;
+import com.wave39.popularmoviesstage2.networking.OnMovieListTaskCompleted;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener, OnTaskCompleted {
+public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener, OnMovieListTaskCompleted {
 
     //public final String LOG_TAG = PosterListFragment.class.getSimpleName();
 
@@ -64,7 +64,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
             mParamSortBy = savedInstanceState.getString(ARG_SORT_BY);
         }
 
-        new DownloadMovieListTask(getActivity().getBaseContext(), mParamSortBy, this).execute();
+        new DownloadMovieListTask(mParamSortBy, this).execute();
 
         mAdapter = new PosterListAdapter(getActivity().getBaseContext());
     }
@@ -124,7 +124,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     public void changeSortBy(String sortBy)
     {
         mParamSortBy = sortBy;
-        new DownloadMovieListTask(getActivity().getBaseContext(), mParamSortBy, this).execute();
+        new DownloadMovieListTask(mParamSortBy, this).execute();
     }
 
     public void redrawWithNewData()
@@ -142,7 +142,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     }
 
     @Override
-    public void onTaskCompleted(List<MovieListItem> result) {
+    public void onMovieListTaskCompleted(List<MovieListItem> result) {
         mMovieList = result;
         redrawWithNewData();
     }

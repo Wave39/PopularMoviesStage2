@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.wave39.popularmoviesstage2.MainActivity;
 import com.wave39.popularmoviesstage2.R;
-import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieReview;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,35 +25,39 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListItem>> {
-    
-    public final String LOG_TAG = DownloadMovieListTask.class.getSimpleName();
+/**
+ * DownloadMovieReviewListTask
+ * Created by bp on 8/20/15.
+ */
 
-    private static List<MovieListItem> ITEMS = new ArrayList<>();
-    private String paramSortBy;
-    private OnMovieListTaskCompleted theListener;
+public class DownloadMovieReviewListTask  extends AsyncTask<Void, Void, List<MovieReview>> {
+    public final String LOG_TAG = DownloadMovieReviewListTask.class.getSimpleName();
 
-    public DownloadMovieListTask(String sortBy, OnMovieListTaskCompleted listener)
+    private static List<MovieReview> mReviews = new ArrayList<>();
+    private int mMovieId;
+    private OnMovieReviewListTaskCompleted theListener;
+
+    public DownloadMovieReviewListTask(int movieId, OnMovieReviewListTaskCompleted listener)
     {
-        paramSortBy = sortBy;
+        mMovieId = movieId;
         theListener = listener;
     }
 
     @Override
-    protected List<MovieListItem> doInBackground(Void... voids) {
+    protected List<MovieReview> doInBackground(Void... voids) {
         try {
-            readMovieData();
+            readMovieReviewData();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return ITEMS;
+        return mReviews;
     }
 
-    protected void onPostExecute(List<MovieListItem> result) {
-        theListener.onMovieListTaskCompleted(result);
+    protected void onPostExecute(List<MovieReview> result) {
+        theListener.onMovieReviewListTaskCompleted(result);
     }
 
-    private void getMovieListDataFromJson(String movieListJsonStr)
+    private void getMovieReviewListDataFromJson(String movieListJsonStr)
             throws JSONException {
         final String RESULTS = "results";
         final String ORIGINAL_TITLE = "original_title";
@@ -64,7 +68,7 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
         final String VOTE_AVERAGE = "vote_average";
         final String RELEASE_DATE = "release_date";
 
-        ITEMS.clear();
+        mReviews.clear();
         try {
             JSONObject movieListJson = new JSONObject(movieListJsonStr);
             JSONArray resultsArray = movieListJson.getJSONArray(RESULTS);
@@ -89,16 +93,16 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
                     }
                 }
 
-                MovieListItem newItem = new MovieListItem();
-                newItem.id = movieId;
-                newItem.originalTitle = originalTitle;
-                newItem.title = movieTitle;
-                newItem.posterPath = posterPath;
-                newItem.overview = overview;
-                newItem.voteAverage = voteAverage;
-                newItem.releaseDate = releaseDate;
+                MovieReview newItem = new MovieReview();
+                newItem.movieId = movieId;
+//                newItem.originalTitle = originalTitle;
+//                newItem.title = movieTitle;
+//                newItem.posterPath = posterPath;
+//                newItem.overview = overview;
+//                newItem.voteAverage = voteAverage;
+//                newItem.releaseDate = releaseDate;
 
-                ITEMS.add(newItem);
+                mReviews.add(newItem);
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -106,19 +110,17 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
         }
     }
 
-    private void readMovieData() throws JSONException {
+    private void readMovieReviewData() throws JSONException {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String movieListJsonStr;
+        String movieReviewListJsonStr;
 
         try {
-            final String MOVIE_LIST_BASE_URL =
-                    "http://api.themoviedb.org/3/discover/movie?";
-            final String SORT_BY_PARAM = "sort_by";
+            final String MOVIE_REVIEW_LIST_BASE_URL =
+                    "http://api.themoviedb.org/3/movie/" + Integer.toString(mMovieId) + "/reviews?";
             final String API_KEY_PARAM = "api_key";
             final String API_KEY_VALUE = MainActivity.getContext().getString(R.string.tmdb_api_key);
-            Uri builtUri = Uri.parse(MOVIE_LIST_BASE_URL).buildUpon()
-                    .appendQueryParameter(SORT_BY_PARAM, paramSortBy)
+            Uri builtUri = Uri.parse(MOVIE_REVIEW_LIST_BASE_URL).buildUpon()
                     .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE)
                     .build();
 
@@ -143,8 +145,9 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
                 return;
             }
 
-            movieListJsonStr = buffer.toString();
-            getMovieListDataFromJson(movieListJsonStr);
+            movieReviewListJsonStr = buffer.toString();
+            Log.i(LOG_TAG, "Review list JSON: " + movieReviewListJsonStr);
+            //getMovieReviewListDataFromJson(movieReviewListJsonStr);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
         } finally {

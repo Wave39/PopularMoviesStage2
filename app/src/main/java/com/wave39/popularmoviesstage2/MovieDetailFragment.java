@@ -12,13 +12,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.MovieReview;
+import com.wave39.popularmoviesstage2.networking.DownloadMovieReviewListTask;
+import com.wave39.popularmoviesstage2.networking.OnMovieReviewListTaskCompleted;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MovieDetailFragment extends Fragment {
+public class MovieDetailFragment extends Fragment implements OnMovieReviewListTaskCompleted {
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
@@ -95,5 +99,12 @@ public class MovieDetailFragment extends Fragment {
         }
 
         releaseDateTextView.setText(releaseDateString);
+
+        new DownloadMovieReviewListTask(movieListItem.id, this).execute();
+    }
+
+    @Override
+    public void onMovieReviewListTaskCompleted(List<MovieReview> result) {
+        Log.i(LOG_TAG, "onMovieReviewListTaskCompleted");
     }
 }

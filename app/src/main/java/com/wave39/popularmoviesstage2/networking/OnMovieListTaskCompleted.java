@@ -9,6 +9,6 @@ import java.util.List;
  * Created by bp on 8/20/15.
  */
 
-public interface OnTaskCompleted {
-    void onTaskCompleted(List<MovieListItem> result);
+public interface OnMovieListTaskCompleted {
+    void onMovieListTaskCompleted(List<MovieListItem> result);
 }
