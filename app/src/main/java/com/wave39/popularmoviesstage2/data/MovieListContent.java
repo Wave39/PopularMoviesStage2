@@ -135,7 +135,7 @@ public class MovieListContent
                         "http://api.themoviedb.org/3/discover/movie?";
                 final String SORT_BY_PARAM = "sort_by";
                 final String API_KEY_PARAM = "api_key";
-                final String API_KEY_VALUE = MainActivity.getContext().getString(R.string.TMDB_API_KEY);
+                final String API_KEY_VALUE = MainActivity.getContext().getString(R.string.tmdb_api_key);
                 Uri builtUri = Uri.parse(MOVIE_LIST_BASE_URL).buildUpon()
                         .appendQueryParameter(SORT_BY_PARAM, paramSortBy)
                         .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE)
