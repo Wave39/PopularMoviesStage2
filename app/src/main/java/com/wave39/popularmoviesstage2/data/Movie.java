@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by bp on 8/4/15.
  */
 
-public class MovieListItem implements Parcelable {
+public class Movie implements Parcelable {
     public int id;
     public String originalTitle;
     public String title;
@@ -19,7 +19,7 @@ public class MovieListItem implements Parcelable {
     public double voteAverage;
     public Date releaseDate;
 
-    public MovieListItem() {
+    public Movie() {
 
     }
 
@@ -45,7 +45,7 @@ public class MovieListItem implements Parcelable {
 
     // Parcelable stuff
 
-    protected MovieListItem(Parcel in) {
+    protected Movie(Parcel in) {
         id = in.readInt();
         originalTitle = in.readString();
         title = in.readString();
@@ -73,15 +73,15 @@ public class MovieListItem implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<MovieListItem> CREATOR = new Parcelable.Creator<MovieListItem>() {
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
-        public MovieListItem createFromParcel(Parcel in) {
-            return new MovieListItem(in);
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
         }
 
         @Override
-        public MovieListItem[] newArray(int size) {
-            return new MovieListItem[size];
+        public Movie[] newArray(int size) {
+            return new Movie[size];
         }
     };
 }

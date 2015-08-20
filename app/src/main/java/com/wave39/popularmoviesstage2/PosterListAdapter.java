@@ -8,14 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.Movie;
 
 /**
  * PosterListAdapter
  * Created by bp on 8/8/15.
  */
 
-public class PosterListAdapter extends ArrayAdapter<MovieListItem> {
+public class PosterListAdapter extends ArrayAdapter<Movie> {
 
     private Context mContext;
 
@@ -38,7 +38,7 @@ public class PosterListAdapter extends ArrayAdapter<MovieListItem> {
             row = convertView;
         }
 
-        MovieListItem data = getItem(position);
+        Movie data = getItem(position);
 
         ViewHolder.getViewHolder(row).setValues(data);
 
@@ -61,7 +61,7 @@ public class PosterListAdapter extends ArrayAdapter<MovieListItem> {
             return (ViewHolder) row.getTag();
         }
 
-        public void setValues(MovieListItem data)
+        public void setValues(Movie data)
         {
             String photoUrl = Common.getPosterURL(data);
             Picasso.with(MainActivity.getContext())

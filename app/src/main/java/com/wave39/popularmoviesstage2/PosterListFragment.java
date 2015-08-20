@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
-import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.networking.DownloadMovieListTask;
 import com.wave39.popularmoviesstage2.networking.OnMovieListTaskCompleted;
 
@@ -36,7 +36,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
     public AbsListView mListView;
     private PosterListAdapter mAdapter;
-    private List<MovieListItem> mMovieList;
+    private List<Movie> mMovieList;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -118,7 +118,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(MovieListItem movieListItem);
+        void onFragmentInteraction(Movie movie);
     }
 
     public void changeSortBy(String sortBy)
@@ -142,7 +142,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     }
 
     @Override
-    public void onMovieListTaskCompleted(List<MovieListItem> result) {
+    public void onMovieListTaskCompleted(List<Movie> result) {
         mMovieList = result;
         redrawWithNewData();
     }

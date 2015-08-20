@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.Movie;
 
 public class MainActivity extends AppCompatActivity implements PosterListFragment.OnFragmentInteractionListener {
 
@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
         return super.onOptionsItemSelected(item);
     }
 
-    public void onFragmentInteraction(MovieListItem movieListItem) {
-        Log.i(LOG_TAG, "onFragmentInteraction with movie list item " + movieListItem);
+    public void onFragmentInteraction(Movie movie) {
+        Log.i(LOG_TAG, "onFragmentInteraction with movie list item " + movie);
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra("movielistitem", movieListItem);
+        intent.putExtra("movielistitem", movie);
         startActivity(intent);
     }
 }

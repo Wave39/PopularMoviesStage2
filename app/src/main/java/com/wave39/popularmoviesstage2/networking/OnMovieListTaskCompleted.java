@@ -1,6 +1,6 @@
 package com.wave39.popularmoviesstage2.networking;
 
-import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.Movie;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
  */
 
 public interface OnMovieListTaskCompleted {
-    void onMovieListTaskCompleted(List<MovieListItem> result);
+    void onMovieListTaskCompleted(List<Movie> result);
 }

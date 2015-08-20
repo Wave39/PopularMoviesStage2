@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.data.MovieReview;
 import com.wave39.popularmoviesstage2.networking.DownloadMovieReviewListTask;
 import com.wave39.popularmoviesstage2.networking.OnMovieReviewListTaskCompleted;
@@ -77,30 +77,30 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         public void onFragmentInteraction();
     }
 
-    public void redrawFragment(MovieListItem movieListItem)
+    public void redrawFragment(Movie movie)
     {
-        Log.i(LOG_TAG, "redrawFragment with movie " + movieListItem);
+        Log.i(LOG_TAG, "redrawFragment with movie " + movie);
 
-        originalTitleTextView.setText(movieListItem.originalTitle);
+        originalTitleTextView.setText(movie.originalTitle);
 
-        String photoUrl = Common.getLargePosterURL(movieListItem);
+        String photoUrl = Common.getLargePosterURL(movie);
         Picasso.with(MainActivity.getContext()).
                 load(photoUrl).
                 into(thumbnailImageView);
 
-        plotSynopsisTextView.setText(movieListItem.plotSynopsis());
+        plotSynopsisTextView.setText(movie.plotSynopsis());
 
-        userRatingTextView.setText(Double.toString(movieListItem.voteAverage));
+        userRatingTextView.setText(Double.toString(movie.voteAverage));
 
         String releaseDateString = "Unknown";
-        if (movieListItem.releaseDate != null) {
+        if (movie.releaseDate != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy");
-            releaseDateString = dateFormat.format(movieListItem.releaseDate);
+            releaseDateString = dateFormat.format(movie.releaseDate);
         }
 
         releaseDateTextView.setText(releaseDateString);
 
-        new DownloadMovieReviewListTask(movieListItem.id, this).execute();
+        new DownloadMovieReviewListTask(movie.id, this).execute();
     }
 
     @Override

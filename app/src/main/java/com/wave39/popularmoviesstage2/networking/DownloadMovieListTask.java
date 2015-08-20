@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.wave39.popularmoviesstage2.MainActivity;
 import com.wave39.popularmoviesstage2.R;
-import com.wave39.popularmoviesstage2.data.MovieListItem;
+import com.wave39.popularmoviesstage2.data.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListItem>> {
+public class DownloadMovieListTask extends AsyncTask<Void, Void, List<Movie>> {
     
     public final String LOG_TAG = DownloadMovieListTask.class.getSimpleName();
 
-    private static List<MovieListItem> ITEMS = new ArrayList<>();
+    private static List<Movie> ITEMS = new ArrayList<>();
     private String paramSortBy;
     private OnMovieListTaskCompleted theListener;
 
@@ -40,7 +40,7 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
     }
 
     @Override
-    protected List<MovieListItem> doInBackground(Void... voids) {
+    protected List<Movie> doInBackground(Void... voids) {
         try {
             readMovieData();
         } catch (JSONException e) {
@@ -49,7 +49,7 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
         return ITEMS;
     }
 
-    protected void onPostExecute(List<MovieListItem> result) {
+    protected void onPostExecute(List<Movie> result) {
         theListener.onMovieListTaskCompleted(result);
     }
 
@@ -89,7 +89,7 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
                     }
                 }
 
-                MovieListItem newItem = new MovieListItem();
+                Movie newItem = new Movie();
                 newItem.id = movieId;
                 newItem.originalTitle = originalTitle;
                 newItem.title = movieTitle;
