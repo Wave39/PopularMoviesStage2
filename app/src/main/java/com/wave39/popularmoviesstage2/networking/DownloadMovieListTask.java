@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.wave39.popularmoviesstage2.MainActivity;
-import com.wave39.popularmoviesstage2.PosterListFragment;
 import com.wave39.popularmoviesstage2.R;
 import com.wave39.popularmoviesstage2.data.MovieListItem;
 
@@ -28,17 +27,16 @@ import java.util.Date;
 import java.util.List;
 
 public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListItem>> {
+    
     public final String LOG_TAG = DownloadMovieListTask.class.getSimpleName();
-    private OnTaskCompleted theListener;
+
     public static List<MovieListItem> ITEMS = new ArrayList<>();
     private Context theContext;
-    private PosterListFragment theFragment;
     private String paramSortBy;
+    private OnTaskCompleted theListener;
 
     public DownloadMovieListTask(Context context, String sortBy, OnTaskCompleted listener)
     {
-        //theFragment = fragment;
-        //paramSortBy = pSortBy;
         theContext = context;
         paramSortBy = sortBy;
         theListener = listener;
@@ -55,7 +53,6 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
     }
 
     protected void onPostExecute(List<MovieListItem> result) {
-        Log.i(LOG_TAG, "onPostExecute result: " + result);
         theListener.onTaskCompleted(result);
     }
 
@@ -87,7 +84,6 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date releaseDate = null;
                 String releaseDateString = movie.getString(RELEASE_DATE);
-                Log.i(LOG_TAG, "Movie " + originalTitle + " has a release date of " + releaseDateString);
                 if ((releaseDateString != null) && (releaseDateString.length() == 10)) {
                     try {
                         releaseDate = dateFormat.parse(releaseDateString);
@@ -95,9 +91,6 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
                         e.printStackTrace();
                     }
                 }
-
-//                    Log.i(LOG_TAG, "Found movie at index " + Integer.toString(idx) +
-//                            " with id " + Integer.toString(movieId) + " and title " + movieTitle);
 
                 MovieListItem newItem = new MovieListItem();
                 newItem.id = movieId;
@@ -110,12 +103,6 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
 
                 ITEMS.add(newItem);
             }
-
-//            theActivity.runOnUiThread(new Runnable() {
-//                public void run() {
-//                    theFragment.redrawWithNewData();
-//                }
-//            });
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -161,8 +148,6 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<MovieListI
 
             movieListJsonStr = buffer.toString();
             getMovieListDataFromJson(movieListJsonStr);
-
-            Log.i(LOG_TAG, "Done with readMovieData");
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
         } finally {
