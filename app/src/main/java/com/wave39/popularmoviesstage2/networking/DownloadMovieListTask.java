@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.wave39.popularmoviesstage2.Common;
 import com.wave39.popularmoviesstage2.MainActivity;
 import com.wave39.popularmoviesstage2.R;
 import com.wave39.popularmoviesstage2.data.Movie;
@@ -13,12 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,10 +102,6 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<Movie>> {
     }
 
     private void readMovieData() throws JSONException {
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-        String movieListJsonStr;
-
         try {
             final String MOVIE_LIST_BASE_URL =
                     "http://api.themoviedb.org/3/discover/movie?";
@@ -121,43 +112,11 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<Movie>> {
                     .appendQueryParameter(SORT_BY_PARAM, paramSortBy)
                     .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE)
                     .build();
-
-            URL url = new URL(builtUri.toString());
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuilder buffer = new StringBuilder();
-            if (inputStream == null) {
-                return;
-            }
-
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line).append("\n");
-            }
-
-            if (buffer.length() == 0) {
-                return;
-            }
-
-            movieListJsonStr = buffer.toString();
+            String movieListJsonStr = Common.getUriString(builtUri);
             getMovieListDataFromJson(movieListJsonStr);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(LOG_TAG, "Error ", e);
         } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
-                }
-            }
         }
     }
 }

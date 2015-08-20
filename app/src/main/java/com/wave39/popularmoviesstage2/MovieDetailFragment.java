@@ -87,9 +87,11 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         originalTitleTextView.setText(movie.originalTitle);
 
         String photoUrl = Common.getLargePosterURL(movie);
-        Picasso.with(MainActivity.getContext()).
-                load(photoUrl).
-                into(thumbnailImageView);
+        Picasso.with(MainActivity.getContext())
+                .load(photoUrl)
+                .placeholder(R.drawable.frames)
+                .error(R.drawable.status_error)
+                .into(thumbnailImageView);
 
         plotSynopsisTextView.setText(movie.plotSynopsis());
 
