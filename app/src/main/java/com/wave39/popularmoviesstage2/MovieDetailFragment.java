@@ -7,19 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-import com.squareup.picasso.Picasso;
 import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.data.MovieReview;
 import com.wave39.popularmoviesstage2.data.MovieVideo;
-import com.wave39.popularmoviesstage2.networking.DownloadMovieReviewListTask;
-import com.wave39.popularmoviesstage2.networking.DownloadMovieVideoListTask;
 import com.wave39.popularmoviesstage2.networking.OnMovieReviewListTaskCompleted;
 import com.wave39.popularmoviesstage2.networking.OnMovieVideoListTaskCompleted;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -29,11 +25,12 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
-    @Bind(R.id.original_title_textview) TextView originalTitleTextView;
-    @Bind(R.id.poster_thumbnail_imageview) ImageView thumbnailImageView;
-    @Bind(R.id.plot_synopsis_textview) TextView plotSynopsisTextView;
-    @Bind(R.id.user_rating_textview) TextView userRatingTextView;
-    @Bind(R.id.release_date_textview) TextView releaseDateTextView;
+    @Bind(R.id.movie_detail_list_view) ListView listView;
+//    @Bind(R.id.original_title_textview) TextView originalTitleTextView;
+//    @Bind(R.id.poster_thumbnail_imageview) ImageView thumbnailImageView;
+//    @Bind(R.id.plot_synopsis_textview) TextView plotSynopsisTextView;
+//    @Bind(R.id.user_rating_textview) TextView userRatingTextView;
+//    @Bind(R.id.release_date_textview) TextView releaseDateTextView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,6 +52,16 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         ButterKnife.bind(this, view);
+
+        String[] values = new String[] { "Linux", "Windows7", "Eclipse", "Suse",
+                "Ubuntu", "Solaris", "Android", "iPhone", "Linux", "Windows7",
+                "Eclipse", "Suse", "Ubuntu", "Solaris", "Android", "iPhone" };
+
+        View headerView = inflater.inflate(R.layout.movie_detail_header, null);
+        listView.addHeaderView(headerView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        listView.setAdapter(adapter);
 
         return view;
     }
@@ -84,29 +91,29 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     {
         Log.i(LOG_TAG, "redrawFragment with movie " + movie);
 
-        originalTitleTextView.setText(movie.originalTitle);
-
-        String photoUrl = Common.getLargePosterURL(movie);
-        Picasso.with(MainActivity.getContext())
-                .load(photoUrl)
-                .placeholder(R.drawable.frames)
-                .error(R.drawable.status_error)
-                .into(thumbnailImageView);
-
-        plotSynopsisTextView.setText(movie.plotSynopsis());
-
-        userRatingTextView.setText(Double.toString(movie.voteAverage));
-
-        String releaseDateString = "Unknown";
-        if (movie.releaseDate != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy");
-            releaseDateString = dateFormat.format(movie.releaseDate);
-        }
-
-        releaseDateTextView.setText(releaseDateString);
-
-        new DownloadMovieReviewListTask(movie.id, this).execute();
-        new DownloadMovieVideoListTask(movie.id, this).execute();
+//        originalTitleTextView.setText(movie.originalTitle);
+//
+//        String photoUrl = Common.getLargePosterURL(movie);
+//        Picasso.with(MainActivity.getContext())
+//                .load(photoUrl)
+//                .placeholder(R.drawable.frames)
+//                .error(R.drawable.status_error)
+//                .into(thumbnailImageView);
+//
+//        plotSynopsisTextView.setText(movie.plotSynopsis());
+//
+//        userRatingTextView.setText(Double.toString(movie.voteAverage));
+//
+//        String releaseDateString = "Unknown";
+//        if (movie.releaseDate != null) {
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+//            releaseDateString = dateFormat.format(movie.releaseDate);
+//        }
+//
+//        releaseDateTextView.setText(releaseDateString);
+//
+//        new DownloadMovieReviewListTask(movie.id, this).execute();
+//        new DownloadMovieVideoListTask(movie.id, this).execute();
     }
 
     @Override
