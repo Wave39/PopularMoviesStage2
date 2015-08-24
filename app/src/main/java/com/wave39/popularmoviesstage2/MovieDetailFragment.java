@@ -8,14 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.data.MovieReview;
 import com.wave39.popularmoviesstage2.data.MovieVideo;
+import com.wave39.popularmoviesstage2.networking.DownloadMovieReviewListTask;
+import com.wave39.popularmoviesstage2.networking.DownloadMovieVideoListTask;
 import com.wave39.popularmoviesstage2.networking.OnMovieReviewListTaskCompleted;
 import com.wave39.popularmoviesstage2.networking.OnMovieVideoListTaskCompleted;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -26,6 +32,8 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
     @Bind(R.id.movie_detail_list_view) ListView listView;
+    private View headerView;
+
 //    @Bind(R.id.original_title_textview) TextView originalTitleTextView;
 //    @Bind(R.id.poster_thumbnail_imageview) ImageView thumbnailImageView;
 //    @Bind(R.id.plot_synopsis_textview) TextView plotSynopsisTextView;
@@ -57,7 +65,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
                 "Ubuntu", "Solaris", "Android", "iPhone", "Linux", "Windows7",
                 "Eclipse", "Suse", "Ubuntu", "Solaris", "Android", "iPhone" };
 
-        View headerView = inflater.inflate(R.layout.movie_detail_header, null);
+        headerView = inflater.inflate(R.layout.movie_detail_header, null);
         listView.addHeaderView(headerView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
@@ -91,29 +99,34 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     {
         Log.i(LOG_TAG, "redrawFragment with movie " + movie);
 
-//        originalTitleTextView.setText(movie.originalTitle);
-//
-//        String photoUrl = Common.getLargePosterURL(movie);
-//        Picasso.with(MainActivity.getContext())
-//                .load(photoUrl)
-//                .placeholder(R.drawable.frames)
-//                .error(R.drawable.status_error)
-//                .into(thumbnailImageView);
-//
-//        plotSynopsisTextView.setText(movie.plotSynopsis());
-//
-//        userRatingTextView.setText(Double.toString(movie.voteAverage));
-//
-//        String releaseDateString = "Unknown";
-//        if (movie.releaseDate != null) {
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy");
-//            releaseDateString = dateFormat.format(movie.releaseDate);
-//        }
-//
-//        releaseDateTextView.setText(releaseDateString);
-//
-//        new DownloadMovieReviewListTask(movie.id, this).execute();
-//        new DownloadMovieVideoListTask(movie.id, this).execute();
+        TextView textView = (TextView) headerView.findViewById(R.id.original_title_textview);
+        textView.setText(movie.originalTitle);
+
+        ImageView imageView = (ImageView) headerView.findViewById(R.id.poster_thumbnail_imageview);
+        String photoUrl = Common.getLargePosterURL(movie);
+        Picasso.with(MainActivity.getContext())
+                .load(photoUrl)
+                .placeholder(R.drawable.frames)
+                .error(R.drawable.status_error)
+                .into(imageView);
+
+        textView = (TextView) headerView.findViewById(R.id.plot_synopsis_textview);
+        textView.setText(movie.plotSynopsis());
+
+        textView = (TextView) headerView.findViewById(R.id.user_rating_textview);
+        textView.setText(Double.toString(movie.voteAverage));
+
+        String releaseDateString = "Unknown";
+        if (movie.releaseDate != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+            releaseDateString = dateFormat.format(movie.releaseDate);
+        }
+
+        textView = (TextView) headerView.findViewById(R.id.release_date_textview);
+        textView.setText(releaseDateString);
+
+        new DownloadMovieReviewListTask(movie.id, this).execute();
+        new DownloadMovieVideoListTask(movie.id, this).execute();
     }
 
     @Override
