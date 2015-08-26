@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +32,8 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     @Bind(R.id.movie_detail_list_view) ListView listView;
     private View headerView;
+    private MovieDetailAdapter mAdapter;
+    private boolean videosLoaded, reviewsLoaded;
 
 //    @Bind(R.id.original_title_textview) TextView originalTitleTextView;
 //    @Bind(R.id.poster_thumbnail_imageview) ImageView thumbnailImageView;
@@ -51,6 +52,8 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         Log.i(LOG_TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
+
+        mAdapter = new MovieDetailAdapter(getActivity().getBaseContext());
     }
 
     @Override
@@ -61,15 +64,10 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         ButterKnife.bind(this, view);
 
-        String[] values = new String[] { "Linux", "Windows7", "Eclipse", "Suse",
-                "Ubuntu", "Solaris", "Android", "iPhone", "Linux", "Windows7",
-                "Eclipse", "Suse", "Ubuntu", "Solaris", "Android", "iPhone" };
-
         headerView = inflater.inflate(R.layout.movie_detail_header, null);
+
         listView.addHeaderView(headerView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
-        listView.setAdapter(adapter);
+        listView.setAdapter(mAdapter);
 
         return view;
     }
@@ -125,6 +123,8 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         textView = (TextView) headerView.findViewById(R.id.release_date_textview);
         textView.setText(releaseDateString);
 
+        videosLoaded = false;
+        reviewsLoaded = false;
         new DownloadMovieReviewListTask(movie.id, this).execute();
         new DownloadMovieVideoListTask(movie.id, this).execute();
     }
@@ -132,10 +132,29 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     @Override
     public void onMovieReviewListTaskCompleted(List<MovieReview> result) {
         Log.i(LOG_TAG, "onMovieReviewListTaskCompleted");
+        reviewsLoaded = true;
+        if (reviewsLoaded && videosLoaded)
+        {
+            redrawWithNewData();
+        }
     }
 
     @Override
     public void onMovieVideoListTaskCompleted(List<MovieVideo> result) {
         Log.i(LOG_TAG, "onMovieVideoListTaskCompleted");
+        videosLoaded = true;
+        if (reviewsLoaded && videosLoaded)
+        {
+            redrawWithNewData();
+        }
     }
+
+    public void redrawWithNewData() {
+        Log.i(LOG_TAG, "redrawWithNewData");
+        Integer[] integerList = new Integer[] { 1, 2 };
+        mAdapter.clear();
+        mAdapter.addAll(integerList);
+        mAdapter.notifyDataSetChanged();
+    }
+
 }
