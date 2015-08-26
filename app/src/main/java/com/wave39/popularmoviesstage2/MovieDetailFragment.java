@@ -21,6 +21,7 @@ import com.wave39.popularmoviesstage2.networking.OnMovieReviewListTaskCompleted;
 import com.wave39.popularmoviesstage2.networking.OnMovieVideoListTaskCompleted;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -30,10 +31,15 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
+    public final Integer ITEM_TYPE_VIDEO = 10;
+    public final Integer ITEM_TYPE_REVIEW = 20;
+
     @Bind(R.id.movie_detail_list_view) ListView listView;
     private View headerView;
     private MovieDetailAdapter mAdapter;
     private boolean videosLoaded, reviewsLoaded;
+    private List<MovieReview> reviewList;
+    private List<MovieVideo> videoList;
 
 //    @Bind(R.id.original_title_textview) TextView originalTitleTextView;
 //    @Bind(R.id.poster_thumbnail_imageview) ImageView thumbnailImageView;
@@ -132,6 +138,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     @Override
     public void onMovieReviewListTaskCompleted(List<MovieReview> result) {
         Log.i(LOG_TAG, "onMovieReviewListTaskCompleted");
+        reviewList = result;
         reviewsLoaded = true;
         if (reviewsLoaded && videosLoaded)
         {
@@ -142,6 +149,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     @Override
     public void onMovieVideoListTaskCompleted(List<MovieVideo> result) {
         Log.i(LOG_TAG, "onMovieVideoListTaskCompleted");
+        videoList = result;
         videosLoaded = true;
         if (reviewsLoaded && videosLoaded)
         {
@@ -151,9 +159,19 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public void redrawWithNewData() {
         Log.i(LOG_TAG, "redrawWithNewData");
-        Integer[] integerList = new Integer[] { 1, 2 };
+        List<Integer> intList = new ArrayList<>();
+        for (Integer idx = 0; idx < videoList.size(); idx++)
+        {
+            intList.add(ITEM_TYPE_VIDEO);
+        }
+
+        for (Integer idx = 0; idx < reviewList.size(); idx++)
+        {
+            intList.add(ITEM_TYPE_REVIEW);
+        }
+
         mAdapter.clear();
-        mAdapter.addAll(integerList);
+        mAdapter.addAll(intList);
         mAdapter.notifyDataSetChanged();
     }
 
