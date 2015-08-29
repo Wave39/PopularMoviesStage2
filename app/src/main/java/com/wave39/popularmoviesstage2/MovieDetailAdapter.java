@@ -61,7 +61,7 @@ public class MovieDetailAdapter extends ArrayAdapter<Object> {
             }
             else
             {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.movie_detail_video_item, parent, false);
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.movie_detail_review_item, parent, false);
                 ReviewViewHolder viewHolder = new ReviewViewHolder(convertView);
                 convertView.setTag(viewHolder);
             }
@@ -99,15 +99,18 @@ public class MovieDetailAdapter extends ArrayAdapter<Object> {
 
     private static class ReviewViewHolder
     {
-        public TextView textView;
+        public TextView authorTextView;
+        public TextView contentTextView;
 
         public ReviewViewHolder(View view) {
-            textView = (TextView) view.findViewById(R.id.movie_detail_video_item_text_view);
+            authorTextView = (TextView) view.findViewById(R.id.author_text_view);
+            contentTextView = (TextView)view.findViewById(R.id.content_text_view);
         }
 
         public void setValues(MovieReview movieReview)
         {
-            textView.setText(movieReview.author);
+            authorTextView.setText("Review by: " + movieReview.author);
+            contentTextView.setText(movieReview.content);
         }
     }
 }
