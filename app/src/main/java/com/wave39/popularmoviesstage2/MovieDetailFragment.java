@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,7 +29,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MovieDetailFragment extends Fragment implements OnMovieReviewListTaskCompleted, OnMovieVideoListTaskCompleted {
+public class MovieDetailFragment extends Fragment implements OnMovieReviewListTaskCompleted, OnMovieVideoListTaskCompleted, AbsListView.OnItemClickListener {
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
@@ -37,6 +39,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     private boolean videosLoaded, reviewsLoaded;
     private List<MovieReview> reviewList;
     private List<MovieVideo> videoList;
+    private List<Object> mObjectList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,6 +68,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
         listView.addHeaderView(headerView);
         listView.setAdapter(mAdapter);
+        listView.setOnItemClickListener(this);
 
         return view;
     }
@@ -87,7 +91,16 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction();
+        public void onFragmentInteraction(Object object);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (null != mListener) {
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+            mListener.onFragmentInteraction(mObjectList.get(position));
+        }
     }
 
     public void redrawFragment(Movie movie)
@@ -150,19 +163,19 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public void redrawWithNewData() {
         Log.i(LOG_TAG, "redrawWithNewData");
-        List<Object> objList = new ArrayList<>();
+        mObjectList = new ArrayList<>();
         for (Integer idx = 0; idx < videoList.size(); idx++)
         {
-            objList.add(videoList.get(idx));
+            mObjectList.add(videoList.get(idx));
         }
 
         for (Integer idx = 0; idx < reviewList.size(); idx++)
         {
-            objList.add(reviewList.get(idx));
+            mObjectList.add(reviewList.get(idx));
         }
 
         mAdapter.clear();
-        mAdapter.addAll(objList);
+        mAdapter.addAll(mObjectList);
         mAdapter.notifyDataSetChanged();
     }
 
