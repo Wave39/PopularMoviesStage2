@@ -88,7 +88,7 @@ public class MovieDetailAdapter extends ArrayAdapter<Object> {
         public TextView textView;
 
         public VideoViewHolder(View view) {
-            textView = (TextView) view.findViewById(R.id.movie_detail_video_item_text_view);
+            textView = (TextView) view.findViewById(R.id.video_name_text_view);
         }
 
         public void setValues(MovieVideo movieVideo)

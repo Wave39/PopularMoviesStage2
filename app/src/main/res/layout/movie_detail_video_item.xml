@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/play_button"
+        android:paddingRight="15dp"
+        />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/movie_detail_video_item_text_view"
+        android:gravity="center_vertical"
+        android:id="@+id/video_name_text_view"
         />
 
-</FrameLayout>
+</LinearLayout>
