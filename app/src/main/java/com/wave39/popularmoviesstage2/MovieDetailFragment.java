@@ -31,21 +31,12 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
-    public final Integer ITEM_TYPE_VIDEO = 10;
-    public final Integer ITEM_TYPE_REVIEW = 20;
-
     @Bind(R.id.movie_detail_list_view) ListView listView;
     private View headerView;
     private MovieDetailAdapter mAdapter;
     private boolean videosLoaded, reviewsLoaded;
     private List<MovieReview> reviewList;
     private List<MovieVideo> videoList;
-
-//    @Bind(R.id.original_title_textview) TextView originalTitleTextView;
-//    @Bind(R.id.poster_thumbnail_imageview) ImageView thumbnailImageView;
-//    @Bind(R.id.plot_synopsis_textview) TextView plotSynopsisTextView;
-//    @Bind(R.id.user_rating_textview) TextView userRatingTextView;
-//    @Bind(R.id.release_date_textview) TextView releaseDateTextView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -159,19 +150,19 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public void redrawWithNewData() {
         Log.i(LOG_TAG, "redrawWithNewData");
-        List<Integer> intList = new ArrayList<>();
+        List<Object> objList = new ArrayList<>();
         for (Integer idx = 0; idx < videoList.size(); idx++)
         {
-            intList.add(ITEM_TYPE_VIDEO);
+            objList.add(videoList.get(idx));
         }
 
         for (Integer idx = 0; idx < reviewList.size(); idx++)
         {
-            intList.add(ITEM_TYPE_REVIEW);
+            objList.add(reviewList.get(idx));
         }
 
         mAdapter.clear();
-        mAdapter.addAll(intList);
+        mAdapter.addAll(objList);
         mAdapter.notifyDataSetChanged();
     }
 

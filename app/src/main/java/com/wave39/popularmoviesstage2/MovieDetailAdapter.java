@@ -7,12 +7,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.wave39.popularmoviesstage2.data.MovieReview;
+import com.wave39.popularmoviesstage2.data.MovieVideo;
+
 /**
  * MovieDetailAdapter
  * Created by bp on 8/26/15.
  */
 
-public class MovieDetailAdapter extends ArrayAdapter<Integer> {
+public class MovieDetailAdapter extends ArrayAdapter<Object> {
+
+    private final int VIEW_TYPE_VIDEO = 0;
+    private final int VIEW_TYPE_REVIEW = 1;
 
     private Context mContext;
 
@@ -23,50 +29,85 @@ public class MovieDetailAdapter extends ArrayAdapter<Integer> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public int getViewTypeCount()
     {
-        View row;
-        if (convertView == null)
-        {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.movie_detail_video_item, null);
-        } else
-        {
-            row = convertView;
-        }
-
-        Integer idx = getItem(position);
-
-        ViewHolder.getViewHolder(row).setValues(idx);
-
-        return row;
+        return 2;
     }
 
-    private static class ViewHolder
+    @Override
+    public int getItemViewType(int position)
+    {
+        Object obj = getItem(position);
+        if (obj instanceof MovieVideo)
+        {
+            return VIEW_TYPE_VIDEO;
+        }
+
+        return VIEW_TYPE_REVIEW;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        int rowType = getItemViewType(position);
+
+        if (convertView == null)
+        {
+            if (rowType == VIEW_TYPE_VIDEO)
+            {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.movie_detail_video_item, parent, false);
+                VideoViewHolder viewHolder = new VideoViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            }
+            else
+            {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.movie_detail_video_item, parent, false);
+                ReviewViewHolder viewHolder = new ReviewViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            }
+        }
+
+        if (rowType == VIEW_TYPE_VIDEO)
+        {
+            MovieVideo movieVideo = (MovieVideo)getItem(position);
+            VideoViewHolder holder = (VideoViewHolder)convertView.getTag();
+            holder.setValues(movieVideo);
+        }
+        else
+        {
+            MovieReview movieReview = (MovieReview)getItem(position);
+            ReviewViewHolder holder = (ReviewViewHolder)convertView.getTag();
+            holder.setValues(movieReview);
+        }
+
+        return convertView;
+    }
+
+    private static class VideoViewHolder
     {
         public TextView textView;
 
-        public static ViewHolder getViewHolder(View row)
-        {
-            if (row.getTag() == null)
-            {
-                ViewHolder holder = new ViewHolder();
-                holder.textView = (TextView) row.findViewById(R.id.movie_detail_video_item_text_view);
-                row.setTag(holder);
-            }
-
-            return (ViewHolder) row.getTag();
+        public VideoViewHolder(View view) {
+            textView = (TextView) view.findViewById(R.id.movie_detail_video_item_text_view);
         }
 
-        public void setValues(Integer idx)
+        public void setValues(MovieVideo movieVideo)
         {
-            textView.setText(Integer.toString(idx));
-//            String photoUrl = Common.getPosterURL(data);
-//            Picasso.with(MainActivity.getContext())
-//                    .load(photoUrl)
-//                    .placeholder(R.drawable.frames)
-//                    .error(R.drawable.status_error)
-//                    .into(Photo);
+            textView.setText(movieVideo.name);
+        }
+    }
+
+    private static class ReviewViewHolder
+    {
+        public TextView textView;
+
+        public ReviewViewHolder(View view) {
+            textView = (TextView) view.findViewById(R.id.movie_detail_video_item_text_view);
+        }
+
+        public void setValues(MovieReview movieReview)
+        {
+            textView.setText(movieReview.author);
         }
     }
 }
