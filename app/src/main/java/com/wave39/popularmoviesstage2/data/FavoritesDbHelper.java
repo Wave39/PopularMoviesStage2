@@ -16,12 +16,13 @@ public class FavoritesDbHelper extends SQLiteOpenHelper
 {
     public final String LOG_TAG = FavoritesDbHelper.class.getSimpleName();
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_NAME = "favorites.sqlite";
 
     private final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoritesEntry.TABLE_NAME + " (" +
-            FavoritesEntry.COLUMN_ID + " INTEGER PRIMARY KEY," +
+            FavoritesEntry.COLUMN_FAVORITE_ID + " INTEGER PRIMARY KEY, " +
+            FavoritesEntry.COLUMN_TMDB_MOVIE_ID + " INTEGER, " +
             FavoritesEntry.COLUMN_ORIGINAL_TITLE + " TEXT, " +
             FavoritesEntry.COLUMN_TITLE + " TEXT, " +
             FavoritesEntry.COLUMN_POSTER_PATH + " TEXT, " +
@@ -47,7 +48,7 @@ public class FavoritesDbHelper extends SQLiteOpenHelper
     {
         Log.w(LOG_TAG, "Upgrading database from version " + Integer.toString(oldVersion) + " to "
                         + Integer.toString(newVersion) + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS MyEmployees");
+        database.execSQL("DROP TABLE IF EXISTS " + FavoritesEntry.TABLE_NAME);
         onCreate(database);
     }
 }

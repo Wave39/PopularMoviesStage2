@@ -32,6 +32,7 @@ public class FavoritesDatabase {
     public long createRecord(Movie movie) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ContentValues values = new ContentValues();
+        values.put(FavoritesEntry.COLUMN_TMDB_MOVIE_ID, movie.tmdbMovieId);
         values.put(FavoritesEntry.COLUMN_ORIGINAL_TITLE, movie.originalTitle);
         values.put(FavoritesEntry.COLUMN_TITLE, movie.title);
         values.put(FavoritesEntry.COLUMN_POSTER_PATH, movie.posterPath);
@@ -42,7 +43,8 @@ public class FavoritesDatabase {
     }
 
     public Cursor selectRecords() {
-        String[] cols = new String[] { FavoritesEntry.COLUMN_ORIGINAL_TITLE, FavoritesEntry.COLUMN_TITLE,
+        String[] cols = new String[] { FavoritesEntry.COLUMN_TMDB_MOVIE_ID,
+                FavoritesEntry.COLUMN_ORIGINAL_TITLE, FavoritesEntry.COLUMN_TITLE,
                 FavoritesEntry.COLUMN_POSTER_PATH, FavoritesEntry.COLUMN_POSTER_OVERVIEW,
                 FavoritesEntry.COLUMN_VOTE_AVERAGE, FavoritesEntry.COLUMN_RELEASE_DATE };
         Cursor mCursor = database.query(true, FavoritesEntry.TABLE_NAME, cols, null, null, null, null, null, null);
@@ -53,4 +55,16 @@ public class FavoritesDatabase {
         return mCursor;
     }
 
+    public boolean recordExists(Movie movie) {
+        boolean recordExists = true;
+        String Query = "Select * from " + FavoritesEntry.TABLE_NAME + " where " +
+                FavoritesEntry.COLUMN_TMDB_MOVIE_ID + " = " + Integer.toString(movie.tmdbMovieId);
+        Cursor cursor = database.rawQuery(Query, null);
+        if (cursor.getCount() <= 0) {
+            recordExists = false;
+        }
+
+        cursor.close();
+        return recordExists;
+    }
 }

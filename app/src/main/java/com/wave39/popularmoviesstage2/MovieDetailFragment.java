@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.wave39.popularmoviesstage2.data.FavoritesDatabase;
 import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.data.MovieReview;
 import com.wave39.popularmoviesstage2.data.MovieVideo;
@@ -29,7 +31,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MovieDetailFragment extends Fragment implements OnMovieReviewListTaskCompleted, OnMovieVideoListTaskCompleted, AbsListView.OnItemClickListener {
+public class MovieDetailFragment extends Fragment implements OnMovieReviewListTaskCompleted,
+        OnMovieVideoListTaskCompleted, AbsListView.OnItemClickListener, View.OnClickListener {
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
@@ -41,6 +44,8 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     private List<MovieVideo> videoList;
     private List<Object> mObjectList;
 
+    private FavoritesDatabase favoritesDatabase;
+
     private OnFragmentInteractionListener mListener;
 
     public MovieDetailFragment() {
@@ -50,10 +55,10 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(LOG_TAG, "onCreate");
-
         super.onCreate(savedInstanceState);
 
         mAdapter = new MovieDetailAdapter(getActivity().getBaseContext());
+        favoritesDatabase = new FavoritesDatabase(getActivity().getBaseContext());
     }
 
     @Override
@@ -69,6 +74,9 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         listView.addHeaderView(headerView);
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(this);
+
+        Button button = (Button) headerView.findViewById(R.id.add_to_favorites_button);
+        button.setOnClickListener(this);
 
         return view;
     }
@@ -103,9 +111,20 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         }
     }
 
+    public void redrawAddToFavoritesButton(boolean recordExists)
+    {
+        Button button = (Button) headerView.findViewById(R.id.add_to_favorites_button);
+        button.setText(recordExists ? "Remove From Favorites" : "Add To Favorites");
+    }
+
     public void redrawFragment(Movie movie)
     {
         Log.i(LOG_TAG, "redrawFragment with movie " + movie);
+
+        boolean recordExists = favoritesDatabase.recordExists(movie);
+        Log.i(LOG_TAG, "Movie record exists in favorites database? " + (recordExists ? "YES" : "NO"));
+
+        redrawAddToFavoritesButton(recordExists);
 
         TextView textView = (TextView) headerView.findViewById(R.id.original_title_textview);
         textView.setText(movie.originalTitle);
@@ -135,8 +154,8 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
         videosLoaded = false;
         reviewsLoaded = false;
-        new DownloadMovieReviewListTask(movie.id, this).execute();
-        new DownloadMovieVideoListTask(movie.id, this).execute();
+        new DownloadMovieReviewListTask(movie.tmdbMovieId, this).execute();
+        new DownloadMovieVideoListTask(movie.tmdbMovieId, this).execute();
     }
 
     @Override
@@ -179,4 +198,15 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onClick(View v)
+    {
+        Log.i(LOG_TAG, "onClick");
+        switch (v.getId())
+        {
+            case R.id.add_to_favorites_button:
+                Log.i(LOG_TAG, "add_to_favorites_button");
+                break;
+        }
+    }
 }

@@ -6,8 +6,8 @@ package com.wave39.popularmoviesstage2.data;
  */
 
 public class MovieReview {
-    public int movieId;
-    public String id;
+    public int tmdbMovieId;
+    public String reviewId;
     public String author;
     public String content;
     public String url;

@@ -1,14 +1,17 @@
 package com.wave39.popularmoviesstage2;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import com.wave39.popularmoviesstage2.data.FavoritesDatabase;
 import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.networking.DownloadMovieListTask;
 import com.wave39.popularmoviesstage2.networking.OnMovieListTaskCompleted;
@@ -26,7 +29,7 @@ import java.util.List;
  */
 public class PosterListFragment extends Fragment implements AbsListView.OnItemClickListener, OnMovieListTaskCompleted {
 
-    //public final String LOG_TAG = PosterListFragment.class.getSimpleName();
+    public final String LOG_TAG = PosterListFragment.class.getSimpleName();
 
     private static final String ARG_SORT_BY = "sort_by";
 
@@ -38,6 +41,9 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     private PosterListAdapter mAdapter;
     private List<Movie> mMovieList;
 
+    private FavoritesDatabase favoritesDatabase;
+    private Cursor favoritesCursor;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -48,6 +54,9 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        favoritesDatabase = new FavoritesDatabase(getActivity().getBaseContext());
+        favoritesCursor = favoritesDatabase.selectRecords();
 
         if (getArguments() != null) {
             mParamSortBy = getArguments().getString(ARG_SORT_BY);
@@ -124,7 +133,16 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     public void changeSortBy(String sortBy)
     {
         mParamSortBy = sortBy;
-        new DownloadMovieListTask(mParamSortBy, this).execute();
+
+        if (sortBy.equals(getString(R.string.favorites)))
+        {
+            Log.i(LOG_TAG, "Favorites selected");
+        }
+        else
+        {
+            Log.i(LOG_TAG, sortBy + " selected");
+            new DownloadMovieListTask(mParamSortBy, this).execute();
+        }
     }
 
     public void redrawWithNewData()

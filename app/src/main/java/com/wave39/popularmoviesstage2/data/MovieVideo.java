@@ -6,8 +6,8 @@ package com.wave39.popularmoviesstage2.data;
  */
 
 public class MovieVideo {
-    public int movieId;
-    public String id;
+    public int tmdbMovieId;
+    public String videoId;
     public String key;
     public String name;
     public String site;

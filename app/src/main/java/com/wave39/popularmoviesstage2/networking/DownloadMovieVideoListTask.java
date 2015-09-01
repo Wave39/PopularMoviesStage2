@@ -66,8 +66,8 @@ public class DownloadMovieVideoListTask extends AsyncTask<Void, Void, List<Movie
                 String type = movie.getString(MovieVideoContract.JSON_TYPE);
 
                 MovieVideo newItem = new MovieVideo();
-                newItem.id = movieVideoId;
-                newItem.movieId = mMovieId;
+                newItem.videoId = movieVideoId;
+                newItem.tmdbMovieId = mMovieId;
                 newItem.key = key;
                 newItem.name = name;
                 newItem.site = site;

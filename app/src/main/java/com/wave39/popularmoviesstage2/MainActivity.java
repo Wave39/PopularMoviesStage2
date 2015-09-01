@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.wave39.popularmoviesstage2.data.FavoritesDatabase;
 import com.wave39.popularmoviesstage2.data.Movie;
 
 public class MainActivity extends AppCompatActivity implements PosterListFragment.OnFragmentInteractionListener {
@@ -16,7 +15,6 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     public final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private static MainActivity instance;
-    private FavoritesDatabase favoritesDatabase;
 
     public MainActivity()
     {
@@ -32,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        favoritesDatabase = new FavoritesDatabase(getContext());
     }
 
     @Override
