@@ -42,7 +42,6 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     private boolean videosLoaded, reviewsLoaded;
     private List<MovieReview> reviewList;
     private List<MovieVideo> videoList;
-    private List<Object> mObjectList;
 
     private FavoritesDatabase favoritesDatabase;
 
@@ -182,19 +181,19 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public void redrawWithNewData() {
         Log.i(LOG_TAG, "redrawWithNewData");
-        mObjectList = new ArrayList<>();
+        List<Object> objectList = new ArrayList<>();
         for (Integer idx = 0; idx < videoList.size(); idx++)
         {
-            mObjectList.add(videoList.get(idx));
+            objectList.add(videoList.get(idx));
         }
 
         for (Integer idx = 0; idx < reviewList.size(); idx++)
         {
-            mObjectList.add(reviewList.get(idx));
+            objectList.add(reviewList.get(idx));
         }
 
         mAdapter.clear();
-        mAdapter.addAll(mObjectList);
+        mAdapter.addAll(objectList);
         mAdapter.notifyDataSetChanged();
     }
 
