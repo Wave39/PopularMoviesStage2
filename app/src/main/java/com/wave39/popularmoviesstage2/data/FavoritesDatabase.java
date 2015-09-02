@@ -42,6 +42,12 @@ public class FavoritesDatabase {
         return database.insert(FavoritesEntry.TABLE_NAME, null, values);
     }
 
+    public boolean deleteRecord(Movie movie)
+    {
+        return database.delete(FavoritesEntry.TABLE_NAME,
+                FavoritesEntry.COLUMN_TMDB_MOVIE_ID + "=" + Integer.toString(movie.tmdbMovieId), null) > 0;
+    }
+
     public Cursor selectRecords() {
         String[] cols = new String[] { FavoritesEntry.COLUMN_TMDB_MOVIE_ID,
                 FavoritesEntry.COLUMN_ORIGINAL_TITLE, FavoritesEntry.COLUMN_TITLE,

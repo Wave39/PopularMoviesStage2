@@ -42,6 +42,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     private boolean videosLoaded, reviewsLoaded;
     private List<MovieReview> reviewList;
     private List<MovieVideo> videoList;
+    private Movie selectedMovie;
 
     private FavoritesDatabase favoritesDatabase;
 
@@ -120,6 +121,8 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     {
         Log.i(LOG_TAG, "redrawFragment with movie " + movie);
 
+        selectedMovie = movie;
+
         boolean recordExists = favoritesDatabase.recordExists(movie);
         Log.i(LOG_TAG, "Movie record exists in favorites database? " + (recordExists ? "YES" : "NO"));
 
@@ -197,14 +200,29 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         mAdapter.notifyDataSetChanged();
     }
 
+    public void addToFavoritesButtonClick() {
+        boolean recordExists = favoritesDatabase.recordExists(selectedMovie);
+        if (recordExists)
+        {
+            Log.i(LOG_TAG, "Record exists, deleting the movie");
+            favoritesDatabase.deleteRecord(selectedMovie);
+        }
+        else
+        {
+            Log.i(LOG_TAG, "Record does not exist, creating the movie");
+            favoritesDatabase.createRecord(selectedMovie);
+        }
+
+        redrawAddToFavoritesButton(!recordExists);
+    }
+
     @Override
     public void onClick(View v)
     {
-        Log.i(LOG_TAG, "onClick");
         switch (v.getId())
         {
             case R.id.add_to_favorites_button:
-                Log.i(LOG_TAG, "add_to_favorites_button");
+                addToFavoritesButtonClick();
                 break;
         }
     }
