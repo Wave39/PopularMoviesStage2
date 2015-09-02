@@ -99,6 +99,18 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mParamSortBy.equals(getString(R.string.favorites)))
+        {
+            Log.i(LOG_TAG, "Reloading the favorites");
+            mMovieList = favoritesDatabase.selectRecords();
+            redrawWithNewData();
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
