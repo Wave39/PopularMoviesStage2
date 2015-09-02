@@ -1,7 +1,6 @@
 package com.wave39.popularmoviesstage2;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -42,7 +41,6 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     private List<Movie> mMovieList;
 
     private FavoritesDatabase favoritesDatabase;
-    private Cursor favoritesCursor;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -56,7 +54,6 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         super.onCreate(savedInstanceState);
 
         favoritesDatabase = new FavoritesDatabase(getActivity().getBaseContext());
-        favoritesCursor = favoritesDatabase.selectRecords();
 
         if (getArguments() != null) {
             mParamSortBy = getArguments().getString(ARG_SORT_BY);
@@ -136,7 +133,8 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
         if (sortBy.equals(getString(R.string.favorites)))
         {
-            Log.i(LOG_TAG, "Favorites selected");
+            mMovieList = favoritesDatabase.selectRecords();
+            redrawWithNewData();
         }
         else
         {

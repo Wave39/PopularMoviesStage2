@@ -1,5 +1,6 @@
 package com.wave39.popularmoviesstage2.data;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +9,11 @@ import android.util.Log;
 
 import com.wave39.popularmoviesstage2.data.FavoritesContract.FavoritesEntry;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
 
 /**
  * FavoritesDatabase
@@ -48,17 +53,42 @@ public class FavoritesDatabase {
                 FavoritesEntry.COLUMN_TMDB_MOVIE_ID + "=" + Integer.toString(movie.tmdbMovieId), null) > 0;
     }
 
-    public Cursor selectRecords() {
+    public List<Movie> selectRecords() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String[] cols = new String[] { FavoritesEntry.COLUMN_TMDB_MOVIE_ID,
                 FavoritesEntry.COLUMN_ORIGINAL_TITLE, FavoritesEntry.COLUMN_TITLE,
                 FavoritesEntry.COLUMN_POSTER_PATH, FavoritesEntry.COLUMN_POSTER_OVERVIEW,
                 FavoritesEntry.COLUMN_VOTE_AVERAGE, FavoritesEntry.COLUMN_RELEASE_DATE };
         Cursor mCursor = database.query(true, FavoritesEntry.TABLE_NAME, cols, null, null, null, null, null, null);
+        List<Movie> movieList = new ArrayList<>();
         if (mCursor != null) {
             mCursor.moveToFirst();
+            while (!mCursor.isAfterLast()) {
+                Movie movie = new Movie();
+                movie.tmdbMovieId = mCursor.getInt(0);
+                movie.originalTitle = mCursor.getString(1);
+                movie.title = mCursor.getString(2);
+                movie.posterPath = mCursor.getString(3);
+                movie.overview = mCursor.getString(4);
+                movie.voteAverage = mCursor.getDouble(5);
+                Date releaseDate = null;
+                String releaseDateString = mCursor.getString(6);
+                if (releaseDateString != null) {
+                    try {
+                        releaseDate = dateFormat.parse(releaseDateString);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                movie.releaseDate = releaseDate;
+
+                movieList.add(movie);
+                mCursor.moveToNext();
+            }
         }
 
-        return mCursor;
+        return movieList;
     }
 
     public boolean recordExists(Movie movie) {

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
             return true;
         }
         else if (id == R.id.action_favorites) {
-            fragment.changeSortBy(getString(R.string.add_to_favorites));
+            fragment.changeSortBy(getString(R.string.favorites));
             return true;
         }
 
