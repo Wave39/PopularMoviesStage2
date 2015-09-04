@@ -18,13 +18,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-public class DownloadMovieListTask extends AsyncTask<Void, Void, List<Movie>> {
+public class DownloadMovieListTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
     
     public final String LOG_TAG = DownloadMovieListTask.class.getSimpleName();
 
-    private static List<Movie> ITEMS = new ArrayList<>();
+    private static ArrayList<Movie> ITEMS = new ArrayList<>();
     private String paramSortBy;
     private OnMovieListTaskCompleted theListener;
 
@@ -35,7 +34,7 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<Movie>> {
     }
 
     @Override
-    protected List<Movie> doInBackground(Void... voids) {
+    protected ArrayList<Movie> doInBackground(Void... voids) {
         try {
             readMovieData();
         } catch (JSONException e) {
@@ -44,7 +43,7 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<Movie>> {
         return ITEMS;
     }
 
-    protected void onPostExecute(List<Movie> result) {
+    protected void onPostExecute(ArrayList<Movie> result) {
         theListener.onMovieListTaskCompleted(result);
     }
 
