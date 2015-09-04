@@ -1,5 +1,8 @@
 package com.wave39.popularmoviesstage2;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
@@ -80,6 +83,21 @@ public class Common
         }
 
         return uriString;
+    }
+
+    public static void watchYoutubeVideo(String id, Activity activity)
+    {
+        try
+        {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            activity.startActivity(intent);
+        }
+        catch (ActivityNotFoundException ex)
+        {
+            Intent intent=new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v="+id));
+            activity.startActivity(intent);
+        }
     }
 
 }

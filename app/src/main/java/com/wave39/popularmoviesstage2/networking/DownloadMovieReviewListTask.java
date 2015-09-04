@@ -64,8 +64,8 @@ public class DownloadMovieReviewListTask  extends AsyncTask<Void, Void, List<Mov
                 String url = movie.getString(MovieReviewContract.JSON_URL);
 
                 MovieReview newItem = new MovieReview();
-                newItem.id = movieReviewId;
-                newItem.movieId = mMovieId;
+                newItem.reviewId = movieReviewId;
+                newItem.tmdbMovieId = mMovieId;
                 newItem.author = author;
                 newItem.content = content;
                 newItem.url = url;

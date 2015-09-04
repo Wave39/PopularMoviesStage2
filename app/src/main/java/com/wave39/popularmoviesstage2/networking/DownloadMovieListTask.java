@@ -85,7 +85,7 @@ public class DownloadMovieListTask extends AsyncTask<Void, Void, List<Movie>> {
                 }
 
                 Movie newItem = new Movie();
-                newItem.id = movieId;
+                newItem.tmdbMovieId = movieId;
                 newItem.originalTitle = originalTitle;
                 newItem.title = movieTitle;
                 newItem.posterPath = posterPath;

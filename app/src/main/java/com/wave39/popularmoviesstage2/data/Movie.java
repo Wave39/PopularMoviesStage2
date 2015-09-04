@@ -11,7 +11,7 @@ import java.util.Date;
  */
 
 public class Movie implements Parcelable {
-    public int id;
+    public int tmdbMovieId;
     public String originalTitle;
     public String title;
     public String posterPath;
@@ -46,7 +46,7 @@ public class Movie implements Parcelable {
     // Parcelable stuff
 
     protected Movie(Parcel in) {
-        id = in.readInt();
+        tmdbMovieId = in.readInt();
         originalTitle = in.readString();
         title = in.readString();
         posterPath = in.readString();
@@ -63,7 +63,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeInt(tmdbMovieId);
         dest.writeString(originalTitle);
         dest.writeString(title);
         dest.writeString(posterPath);
