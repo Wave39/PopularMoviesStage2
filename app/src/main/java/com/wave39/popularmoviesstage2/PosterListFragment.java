@@ -1,8 +1,8 @@
 package com.wave39.popularmoviesstage2;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.wave39.popularmoviesstage2.data.Movie;
 import com.wave39.popularmoviesstage2.networking.DownloadMovieListTask;
 import com.wave39.popularmoviesstage2.networking.OnMovieListTaskCompleted;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -31,6 +31,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     public final String LOG_TAG = PosterListFragment.class.getSimpleName();
 
     private static final String ARG_SORT_BY = "sort_by";
+    private static final String ARG_MOVIE_LIST = "movie_list";
 
     private String mParamSortBy;
 
@@ -38,7 +39,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
     public AbsListView mListView;
     private PosterListAdapter mAdapter;
-    private List<Movie> mMovieList;
+    private ArrayList<Movie> mMovieList;
 
     private FavoritesDatabase favoritesDatabase;
 
@@ -59,8 +60,7 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
             mParamSortBy = getArguments().getString(ARG_SORT_BY);
         }
 
-        if (mParamSortBy == null || mParamSortBy.length() == 0)
-        {
+        if (mParamSortBy == null || mParamSortBy.length() == 0) {
             // set the default sort by parameter if it is empty
             mParamSortBy = MainActivity.getContext().getString(R.string.api_value_sort_by_popularity);
         }
@@ -68,10 +68,6 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_SORT_BY)) {
             // restore the sort by from the bundle state, such as after a rotation
             mParamSortBy = savedInstanceState.getString(ARG_SORT_BY);
-        }
-
-        if (!mParamSortBy.equals(getString(R.string.favorites))) {
-            new DownloadMovieListTask(mParamSortBy, this).execute();
         }
 
         mAdapter = new PosterListAdapter(getActivity().getBaseContext());
@@ -85,6 +81,16 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
         mListView = (AbsListView) view.findViewById(R.id.grid_view);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+
+        if (!mParamSortBy.equals(getString(R.string.favorites))) {
+            if (savedInstanceState != null && savedInstanceState.containsKey(ARG_MOVIE_LIST)) {
+                mMovieList = savedInstanceState.getParcelableArrayList(ARG_MOVIE_LIST);
+                getDataAndRedraw();
+            }
+            else {
+                new DownloadMovieListTask(mParamSortBy, this).execute();
+            }
+        }
 
         return view;
     }
@@ -179,11 +185,12 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(ARG_SORT_BY, mParamSortBy);
+        outState.putParcelableArrayList(ARG_MOVIE_LIST, mMovieList);
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onMovieListTaskCompleted(List<Movie> result) {
+    public void onMovieListTaskCompleted(ArrayList<Movie> result) {
         mMovieList = result;
         redrawWithNewData();
     }

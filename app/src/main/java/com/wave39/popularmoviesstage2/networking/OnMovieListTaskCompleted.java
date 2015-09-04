@@ -2,7 +2,7 @@ package com.wave39.popularmoviesstage2.networking;
 
 import com.wave39.popularmoviesstage2.data.Movie;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * OnTaskCompleted
@@ -10,5 +10,5 @@ import java.util.List;
  */
 
 public interface OnMovieListTaskCompleted {
-    void onMovieListTaskCompleted(List<Movie> result);
+    void onMovieListTaskCompleted(ArrayList<Movie> result);
 }

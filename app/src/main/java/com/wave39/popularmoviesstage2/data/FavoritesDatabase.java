@@ -12,7 +12,6 @@ import com.wave39.popularmoviesstage2.data.FavoritesContract.FavoritesEntry;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
 
 /**
@@ -53,14 +52,14 @@ public class FavoritesDatabase {
                 FavoritesEntry.COLUMN_TMDB_MOVIE_ID + "=" + Integer.toString(movie.tmdbMovieId), null) > 0;
     }
 
-    public List<Movie> selectRecords() {
+    public ArrayList<Movie> selectRecords() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String[] cols = new String[] { FavoritesEntry.COLUMN_TMDB_MOVIE_ID,
                 FavoritesEntry.COLUMN_ORIGINAL_TITLE, FavoritesEntry.COLUMN_TITLE,
                 FavoritesEntry.COLUMN_POSTER_PATH, FavoritesEntry.COLUMN_POSTER_OVERVIEW,
                 FavoritesEntry.COLUMN_VOTE_AVERAGE, FavoritesEntry.COLUMN_RELEASE_DATE };
         Cursor mCursor = database.query(true, FavoritesEntry.TABLE_NAME, cols, null, null, null, null, null, null);
-        List<Movie> movieList = new ArrayList<>();
+        ArrayList<Movie> movieList = new ArrayList<>();
         if (mCursor != null) {
             mCursor.moveToFirst();
             while (!mCursor.isAfterLast()) {
