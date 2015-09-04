@@ -35,6 +35,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         OnMovieVideoListTaskCompleted, AbsListView.OnItemClickListener, View.OnClickListener {
 
     public final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
+    private static final String ARG_SELECTED_MOVIE = "selected_movie";
 
     @Bind(R.id.movie_detail_list_view) ListView listView;
     private View headerView;
@@ -47,9 +48,15 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     private FavoritesDatabase favoritesDatabase;
 
     private OnFragmentInteractionListener mListener;
+    private PosterListFragment posterListFragment;
 
     public MovieDetailFragment() {
         // Required empty public constructor
+    }
+
+    public void setPosterListFragment(PosterListFragment plf)
+    {
+        posterListFragment = plf;
     }
 
     @Override
@@ -77,6 +84,12 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
         Button button = (Button) headerView.findViewById(R.id.add_to_favorites_button);
         button.setOnClickListener(this);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_SELECTED_MOVIE)) {
+            // restore the sort by from the bundle state, such as after a rotation
+            selectedMovie = savedInstanceState.getParcelable(ARG_SELECTED_MOVIE);
+            redrawFragment(selectedMovie);
+        }
 
         return view;
     }
@@ -214,6 +227,11 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         }
 
         redrawAddToFavoritesButton(!recordExists);
+
+        if (posterListFragment != null)
+        {
+            posterListFragment.getDataAndRedraw();
+        }
     }
 
     @Override
@@ -226,4 +244,11 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
                 break;
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(ARG_SELECTED_MOVIE, selectedMovie);
+        super.onSaveInstanceState(outState);
+    }
+
 }

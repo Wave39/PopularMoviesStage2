@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        PosterListFragment fragment = (PosterListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_posters);
+        PosterListFragment fragment = (PosterListFragment)getFragmentManager().findFragmentById(R.id.fragment_posters);
         int id = item.getItemId();
         if (id == R.id.action_sort_by_popularity) {
             fragment.changeSortBy(getString(R.string.api_value_sort_by_popularity));

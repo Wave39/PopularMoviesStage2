@@ -2,7 +2,7 @@ package com.wave39.popularmoviesstage2;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +70,9 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
             mParamSortBy = savedInstanceState.getString(ARG_SORT_BY);
         }
 
-        new DownloadMovieListTask(mParamSortBy, this).execute();
+        if (!mParamSortBy.equals(getString(R.string.favorites))) {
+            new DownloadMovieListTask(mParamSortBy, this).execute();
+        }
 
         mAdapter = new PosterListAdapter(getActivity().getBaseContext());
     }
@@ -118,6 +120,12 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        MovieDetailFragment fragment = (MovieDetailFragment) getFragmentManager().findFragmentById(R.id.fragment_movie_detail);
+        if (fragment != null) {
+            fragment.setPosterListFragment(this);
+        }
+
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
@@ -142,17 +150,22 @@ public class PosterListFragment extends Fragment implements AbsListView.OnItemCl
     public void changeSortBy(String sortBy)
     {
         mParamSortBy = sortBy;
+        getDataAndRedraw();
+    }
 
-        if (sortBy.equals(getString(R.string.favorites)))
+    public void getDataAndRedraw()
+    {
+        if (mParamSortBy.equals(getString(R.string.favorites)))
         {
             mMovieList = favoritesDatabase.selectRecords();
             redrawWithNewData();
         }
         else
         {
-            Log.i(LOG_TAG, sortBy + " selected");
+            Log.i(LOG_TAG, mParamSortBy + " selected");
             new DownloadMovieListTask(mParamSortBy, this).execute();
         }
+
     }
 
     public void redrawWithNewData()
