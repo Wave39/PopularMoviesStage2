@@ -124,14 +124,12 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         }
     }
 
-    public void redrawAddToFavoritesButton(boolean recordExists)
-    {
+    public void redrawAddToFavoritesButton(boolean recordExists) {
         Button button = (Button) headerView.findViewById(R.id.add_to_favorites_button);
         button.setText(recordExists ? "Remove From Favorites" : "Add To Favorites");
     }
 
-    public void redrawFragment(Movie movie)
-    {
+    public void redrawFragment(Movie movie) {
         Log.i(LOG_TAG, "redrawFragment with movie " + movie);
 
         selectedMovie = movie;
@@ -178,8 +176,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         Log.i(LOG_TAG, "onMovieReviewListTaskCompleted");
         reviewList = result;
         reviewsLoaded = true;
-        if (reviewsLoaded && videosLoaded)
-        {
+        if (reviewsLoaded && videosLoaded) {
             redrawWithNewData();
         }
     }
@@ -189,8 +186,7 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
         Log.i(LOG_TAG, "onMovieVideoListTaskCompleted");
         videoList = result;
         videosLoaded = true;
-        if (reviewsLoaded && videosLoaded)
-        {
+        if (reviewsLoaded && videosLoaded) {
             redrawWithNewData();
         }
     }
@@ -198,13 +194,11 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
     public void redrawWithNewData() {
         Log.i(LOG_TAG, "redrawWithNewData");
         List<Object> objectList = new ArrayList<>();
-        for (Integer idx = 0; idx < videoList.size(); idx++)
-        {
+        for (Integer idx = 0; idx < videoList.size(); idx++) {
             objectList.add(videoList.get(idx));
         }
 
-        for (Integer idx = 0; idx < reviewList.size(); idx++)
-        {
+        for (Integer idx = 0; idx < reviewList.size(); idx++) {
             objectList.add(reviewList.get(idx));
         }
 
@@ -215,30 +209,23 @@ public class MovieDetailFragment extends Fragment implements OnMovieReviewListTa
 
     public void addToFavoritesButtonClick() {
         boolean recordExists = favoritesDatabase.recordExists(selectedMovie);
-        if (recordExists)
-        {
-            Log.i(LOG_TAG, "Record exists, deleting the movie");
+        if (recordExists) {
             favoritesDatabase.deleteRecord(selectedMovie);
         }
-        else
-        {
-            Log.i(LOG_TAG, "Record does not exist, creating the movie");
+        else {
             favoritesDatabase.createRecord(selectedMovie);
         }
 
         redrawAddToFavoritesButton(!recordExists);
 
-        if (posterListFragment != null)
-        {
+        if (posterListFragment != null) {
             posterListFragment.getDataAndRedraw();
         }
     }
 
     @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.add_to_favorites_button:
                 addToFavoritesButtonClick();
                 break;
